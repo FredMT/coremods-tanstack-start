@@ -1,21 +1,26 @@
 /// <reference types="vite/client" />
-import type { ReactNode } from "react";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
-  Outlet,
   HeadContent,
+  Outlet,
   Scripts,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { ReactNode } from "react";
 
-import appCss from "@/styles/app.css?url";
-import type { QueryClient } from "@tanstack/react-query";
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
+import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/Navigation";
 import { NotFound } from "@/components/NotFound";
-
+import { getCsrfToken } from "@/fn/getCsrfToken";
+import { getUser } from "@/fn/getUser";
+import appCss from "@/styles/app.css?url";
+import { ResAuthUser } from "@/types/ResAuthUser";
+import type { QueryClient } from "@tanstack/react-query";
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
+  user: ResAuthUser | null;
 }>()({
   head: () => ({
     meta: [
@@ -46,6 +51,13 @@ export const Route = createRootRouteWithContext<{
   },
   notFoundComponent: () => <NotFound />,
   component: RootComponent,
+  beforeLoad: async () => {
+    await getCsrfToken();
+    const res = await getUser();
+    return {
+      user: res?.data || null,
+    };
+  },
 });
 
 function RootComponent() {
@@ -57,13 +69,17 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  const context = Route.useRouteContext();
+  const user = context.user as ResAuthUser | null;
   return (
     <html>
       <head>
         <HeadContent />
       </head>
-      <body>
-        {children}
+      <body className="flex flex-col min-h-dvh">
+        <Navigation user={user} />
+        <main className="flex-1">{children}</main>
+        <Footer />
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <Scripts />
