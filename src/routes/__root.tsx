@@ -18,6 +18,7 @@ import { getUser } from "@/fn/getUser";
 import appCss from "@/styles/app.css?url";
 import { ResAuthUser } from "@/types/ResAuthUser";
 import type { QueryClient } from "@tanstack/react-query";
+import { ThemeProvider } from "@/components/theme-provider";
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   user: ResAuthUser | null;
@@ -62,9 +63,11 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
+    <ThemeProvider>
+      <RootDocument>
+        <Outlet />
+      </RootDocument>
+    </ThemeProvider>
   );
 }
 
@@ -72,7 +75,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   const context = Route.useRouteContext();
   const user = context.user as ResAuthUser | null;
   return (
-    <html>
+    <html suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

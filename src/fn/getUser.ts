@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getCookie } from "@tanstack/react-start/server";
+import { deleteCookie, getCookie } from "@tanstack/react-start/server";
+import axios, { AxiosError } from "axios";
 
 export const getUser = createServerFn({
   method: "GET",
@@ -9,16 +10,21 @@ export const getUser = createServerFn({
 
     if (!cookie) return null;
 
-    const response = await fetch("http://localhost:8080/api/user/me", {
+    const response = await axios.get("http://localhost:8080/api/user/me", {
       headers: {
         Cookie: `SESSION=${cookie}`,
         "Content-Type": "application/json",
       },
     });
 
-    if (!response.ok) return null;
-    return response.json();
+    return response.data;
   } catch (error) {
-    console.error("Error getting user from getUser.ts", error);
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401) {
+        deleteCookie("SESSION");
+        return null;
+      }
+    }
+    console.error("Non 401 error getting user from getUser.ts", error);
   }
 });

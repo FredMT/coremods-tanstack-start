@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
+import axios from "axios";
 
 export const getCsrfToken = createServerFn({
   method: "GET",
@@ -9,13 +10,11 @@ export const getCsrfToken = createServerFn({
   try {
     if (!cookie) return null;
 
-    const response = await fetch("http://localhost:8080/csrf", {
-      credentials: "include",
-    });
+    const response = await axios.get("http://localhost:8080/csrf");
 
-    if (!response.ok) return null;
+    if (response.status !== 200) return null;
 
-    const data = await response.json();
+    const data = response.data;
 
     setCookie(data.headerName, data.value);
   } catch (error) {

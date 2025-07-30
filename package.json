@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build"
+    "build": "vite build",
+    "generate": "orval --config orval.config.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,8 @@
     "@tanstack/react-router-devtools": "^1.130.1",
     "@tanstack/react-router-with-query": "^1.130.1",
     "@tanstack/react-start": "^1.130.1",
+    "@tanstack/zod-adapter": "^1.130.8",
+    "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.526.0",
