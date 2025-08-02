@@ -1,92 +1,92 @@
 /// <reference types="vite/client" />
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
-  HeadContent,
-  Outlet,
-  Scripts,
-  createRootRouteWithContext,
-} from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import type { ReactNode } from "react";
+    HeadContent,
+    Outlet,
+    Scripts,
+    createRootRouteWithContext,
+} from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import type { ReactNode } from 'react'
 
-import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
-import { Footer } from "@/components/Footer";
-import { Navigation } from "@/components/Navigation";
-import { NotFound } from "@/components/NotFound";
-import { getCsrfToken } from "@/fn/getCsrfToken";
-import { getUser } from "@/fn/getUser";
-import appCss from "@/styles/app.css?url";
-import { ResAuthUser } from "@/types/ResAuthUser";
-import type { QueryClient } from "@tanstack/react-query";
-import { ThemeProvider } from "@/components/theme-provider";
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
+import { Footer } from '@/components/Footer'
+import { Navigation } from '@/components/navbar/Navigation'
+import { NotFound } from '@/components/NotFound'
+import { ThemeProvider } from '@/components/theme-provider'
+import { getCsrfToken } from '@/fn/getCsrfToken'
+import { getUser } from '@/fn/getUser'
+import appCss from '@/styles/app.css?url'
+import { ResAuthUser } from '@/types/ResAuthUser'
+import type { QueryClient } from '@tanstack/react-query'
 export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient;
-  user: ResAuthUser | null;
+    queryClient: QueryClient
+    user: ResAuthUser | null
 }>()({
-  head: () => ({
-    meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      {
-        title: "Coremods",
-      },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-    ],
-  }),
-  errorComponent: (props) => {
-    return (
-      <RootDocument>
-        <DefaultCatchBoundary {...props} />
-      </RootDocument>
-    );
-  },
-  notFoundComponent: () => <NotFound />,
-  component: RootComponent,
-  beforeLoad: async () => {
-    await getCsrfToken();
-    const res = await getUser();
-    return {
-      user: res?.data || null,
-    };
-  },
-});
+    head: () => ({
+        meta: [
+            {
+                charSet: 'utf-8',
+            },
+            {
+                name: 'viewport',
+                content: 'width=device-width, initial-scale=1',
+            },
+            {
+                title: 'ModSanctuary',
+            },
+        ],
+        links: [
+            {
+                rel: 'stylesheet',
+                href: appCss,
+            },
+        ],
+    }),
+    errorComponent: (props) => {
+        return (
+            <RootDocument>
+                <DefaultCatchBoundary {...props} />
+            </RootDocument>
+        )
+    },
+    notFoundComponent: () => <NotFound />,
+    component: RootComponent,
+    beforeLoad: async () => {
+        await getCsrfToken()
+        const res = await getUser()
+        return {
+            user: res?.data || null,
+        }
+    },
+})
 
 function RootComponent() {
-  return (
-    <ThemeProvider>
-      <RootDocument>
-        <Outlet />
-      </RootDocument>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider>
+            <RootDocument>
+                <Outlet />
+            </RootDocument>
+        </ThemeProvider>
+    )
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-  const context = Route.useRouteContext();
-  const user = context.user as ResAuthUser | null;
-  return (
-    <html suppressHydrationWarning>
-      <head>
-        <HeadContent />
-      </head>
-      <body className="flex flex-col min-h-dvh">
-        <Navigation user={user} />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <TanStackRouterDevtools position="bottom-right" />
-        <ReactQueryDevtools buttonPosition="bottom-left" />
-        <Scripts />
-      </body>
-    </html>
-  );
+    const context = Route.useRouteContext()
+    const user = context.user as ResAuthUser | null
+    return (
+        <html suppressHydrationWarning>
+            <head>
+                <HeadContent />
+            </head>
+            <body className="flex min-h-dvh flex-col">
+                <Navigation user={user} />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <TanStackRouterDevtools position="bottom-right" />
+                <ReactQueryDevtools buttonPosition="bottom-left" />
+                <Scripts />
+            </body>
+        </html>
+    )
 }

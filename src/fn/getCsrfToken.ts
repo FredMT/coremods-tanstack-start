@@ -8,7 +8,7 @@ export const getCsrfToken = createServerFn({
   const cookie = getCookie("X-XSRF-Token");
 
   try {
-    if (!cookie) return null;
+    if (cookie) return;
 
     const response = await axios.get("http://localhost:8080/csrf");
 
@@ -16,8 +16,8 @@ export const getCsrfToken = createServerFn({
 
     const data = response.data;
 
-    setCookie(data.headerName, data.value);
+    setCookie(data.headerName, data.token);
   } catch (error) {
-    console.error("Error getting CSRF token from getCsrfToken.ts", error);
-  }
-});
+        console.error('Error getting CSRF token from getCsrfToken.ts', error)
+    }
+})
