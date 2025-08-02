@@ -45,7 +45,7 @@ AXIOS_INSTANCE.interceptors.response.use(
             }
         }
 
-        const serializableError: any = {
+        const serializableError: SerializableError = {
             message: error.message,
             name: error.name,
             code: error.code,
@@ -60,7 +60,10 @@ AXIOS_INSTANCE.interceptors.response.use(
             if (error.response.headers) {
                 const headers = error.response.headers
                 Object.keys(headers).forEach((key) => {
-                    if (typeof headers[key] === 'string') {
+                    if (
+                        typeof headers[key] === 'string' &&
+                        serializableError.headers
+                    ) {
                         serializableError.headers[key] = headers[key]
                     }
                 })
@@ -137,7 +140,7 @@ export const customInstance = <T>(
     })
         .then(({ data }) => data)
         .catch((error) => {
-            const serializableError: any = {
+            const serializableError: SerializableError = {
                 message: error.message,
                 name: error.name,
                 code: error.code,
@@ -161,5 +164,15 @@ export const customInstance = <T>(
     return promise
 }
 
-export type ErrorType<Error> = AxiosError<Error>
+export interface SerializableError {
+    message: string
+    name: string
+    code?: string
+    status?: number
+    statusText?: string
+    data?: any
+    headers?: Record<string, string>
+}
+
+export type ErrorType<e> = AxiosError<e>
 export type BodyType<BodyData> = BodyData

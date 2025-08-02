@@ -1,7 +1,9 @@
 import { createServerFn } from '@tanstack/react-start'
 import { deleteCookie, getCookie } from '@tanstack/react-start/server'
-import { AxiosError } from 'axios'
-import { customInstance } from '../lib/api/mutator/custom-instance'
+import {
+    AXIOS_INSTANCE,
+    SerializableError,
+} from '../lib/api/mutator/custom-instance'
 
 export const getUser = createServerFn({
     method: 'GET',
@@ -11,23 +13,19 @@ export const getUser = createServerFn({
 
         if (!cookie) return null
 
-        const response = await customInstance<any>({
-            url: '/api/user/me',
-            method: 'GET',
+        const response = await AXIOS_INSTANCE.get('/api/user/me', {
             headers: {
                 Cookie: `SESSION=${cookie}`,
-                'Content-Type': 'application/json',
             },
         })
 
-        return response
-    } catch (error) {
-        if (error instanceof AxiosError) {
-            if (error.response?.status === 401) {
-                deleteCookie('SESSION')
-                return null
-            }
+        return response.data
+    } catch (error: unknown) {
+        const err = error as SerializableError
+        if (err.status === 401) {
+            deleteCookie('SESSION')
+            return null
         }
-        console.error('Non 401 error getting user from getUser.ts', error)
+        return null
     }
 })
