@@ -34,13 +34,6 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseBugReportPriorityUpdateResponse,
   ApiResponseBugReportResponse,
@@ -54,42 +47,48 @@ import type {
   UpdateBugReportStatusRequest
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType , BodyType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const updateBugReportStatus = (
     bugReportId: number,
-    updateBugReportStatusRequest: UpdateBugReportStatusRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseBugReportStatusUpdateResponse>> => {
-    
-    
-    return axios.default.put(
-      `http://localhost:8080/api/v1/bug-reports/${bugReportId}/status`,
-      updateBugReportStatusRequest,options
-    );
-  }
+    updateBugReportStatusRequest: BodyType<UpdateBugReportStatusRequest>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseBugReportStatusUpdateResponse>(
+      {url: `http://localhost:8080/api/v1/bug-reports/${bugReportId}/status`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateBugReportStatusRequest
+    },
+      options);
+    }
+  
 
 
-
-export const getUpdateBugReportStatusMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBugReportStatus>>, TError,{bugReportId: number;data: UpdateBugReportStatusRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof updateBugReportStatus>>, TError,{bugReportId: number;data: UpdateBugReportStatusRequest}, TContext> => {
+export const getUpdateBugReportStatusMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBugReportStatus>>, TError,{bugReportId: number;data: BodyType<UpdateBugReportStatusRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateBugReportStatus>>, TError,{bugReportId: number;data: BodyType<UpdateBugReportStatusRequest>}, TContext> => {
 
 const mutationKey = ['updateBugReportStatus'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateBugReportStatus>>, {bugReportId: number;data: UpdateBugReportStatusRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateBugReportStatus>>, {bugReportId: number;data: BodyType<UpdateBugReportStatusRequest>}> = (props) => {
           const {bugReportId,data} = props ?? {};
 
-          return  updateBugReportStatus(bugReportId,data,axiosOptions)
+          return  updateBugReportStatus(bugReportId,data,requestOptions)
         }
 
         
@@ -98,15 +97,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateBugReportStatusMutationResult = NonNullable<Awaited<ReturnType<typeof updateBugReportStatus>>>
-    export type UpdateBugReportStatusMutationBody = UpdateBugReportStatusRequest
-    export type UpdateBugReportStatusMutationError = AxiosError<unknown>
+    export type UpdateBugReportStatusMutationBody = BodyType<UpdateBugReportStatusRequest>
+    export type UpdateBugReportStatusMutationError = ErrorType<unknown>
 
-    export const useUpdateBugReportStatus = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBugReportStatus>>, TError,{bugReportId: number;data: UpdateBugReportStatusRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useUpdateBugReportStatus = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBugReportStatus>>, TError,{bugReportId: number;data: BodyType<UpdateBugReportStatusRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateBugReportStatus>>,
         TError,
-        {bugReportId: number;data: UpdateBugReportStatusRequest},
+        {bugReportId: number;data: BodyType<UpdateBugReportStatusRequest>},
         TContext
       > => {
 
@@ -116,36 +115,38 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const updateBugReportPriority = (
     bugReportId: number,
-    updateBugReportPriorityRequest: UpdateBugReportPriorityRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseBugReportPriorityUpdateResponse>> => {
-    
-    
-    return axios.default.put(
-      `http://localhost:8080/api/v1/bug-reports/${bugReportId}/priority`,
-      updateBugReportPriorityRequest,options
-    );
-  }
+    updateBugReportPriorityRequest: BodyType<UpdateBugReportPriorityRequest>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseBugReportPriorityUpdateResponse>(
+      {url: `http://localhost:8080/api/v1/bug-reports/${bugReportId}/priority`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateBugReportPriorityRequest
+    },
+      options);
+    }
+  
 
 
-
-export const getUpdateBugReportPriorityMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBugReportPriority>>, TError,{bugReportId: number;data: UpdateBugReportPriorityRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof updateBugReportPriority>>, TError,{bugReportId: number;data: UpdateBugReportPriorityRequest}, TContext> => {
+export const getUpdateBugReportPriorityMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBugReportPriority>>, TError,{bugReportId: number;data: BodyType<UpdateBugReportPriorityRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateBugReportPriority>>, TError,{bugReportId: number;data: BodyType<UpdateBugReportPriorityRequest>}, TContext> => {
 
 const mutationKey = ['updateBugReportPriority'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateBugReportPriority>>, {bugReportId: number;data: UpdateBugReportPriorityRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateBugReportPriority>>, {bugReportId: number;data: BodyType<UpdateBugReportPriorityRequest>}> = (props) => {
           const {bugReportId,data} = props ?? {};
 
-          return  updateBugReportPriority(bugReportId,data,axiosOptions)
+          return  updateBugReportPriority(bugReportId,data,requestOptions)
         }
 
         
@@ -154,15 +155,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateBugReportPriorityMutationResult = NonNullable<Awaited<ReturnType<typeof updateBugReportPriority>>>
-    export type UpdateBugReportPriorityMutationBody = UpdateBugReportPriorityRequest
-    export type UpdateBugReportPriorityMutationError = AxiosError<unknown>
+    export type UpdateBugReportPriorityMutationBody = BodyType<UpdateBugReportPriorityRequest>
+    export type UpdateBugReportPriorityMutationError = ErrorType<unknown>
 
-    export const useUpdateBugReportPriority = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBugReportPriority>>, TError,{bugReportId: number;data: UpdateBugReportPriorityRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useUpdateBugReportPriority = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBugReportPriority>>, TError,{bugReportId: number;data: BodyType<UpdateBugReportPriorityRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateBugReportPriority>>,
         TError,
-        {bugReportId: number;data: UpdateBugReportPriorityRequest},
+        {bugReportId: number;data: BodyType<UpdateBugReportPriorityRequest>},
         TContext
       > => {
 
@@ -171,31 +172,33 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     export const getBugReportsByMod = (
-    modId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListBugReportResponse>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/bug-reports/${modId}`,options
-    );
-  }
-
+    modId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListBugReportResponse>(
+      {url: `http://localhost:8080/api/v1/bug-reports/${modId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetBugReportsByModQueryKey = (modId?: number,) => {
     return [`http://localhost:8080/api/v1/bug-reports/${modId}`] as const;
     }
 
     
-export const getGetBugReportsByModInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetBugReportsByModInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetBugReportsByModQueryKey(modId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBugReportsByMod>>> = ({ signal }) => getBugReportsByMod(modId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBugReportsByMod>>> = ({ signal }) => getBugReportsByMod(modId, requestOptions, signal);
 
       
 
@@ -205,36 +208,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetBugReportsByModInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getBugReportsByMod>>>
-export type GetBugReportsByModInfiniteQueryError = AxiosError<unknown>
+export type GetBugReportsByModInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(
+export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(
  modId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBugReportsByMod>>,
           TError,
           Awaited<ReturnType<typeof getBugReportsByMod>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(
+export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(
  modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBugReportsByMod>>,
           TError,
           Awaited<ReturnType<typeof getBugReportsByMod>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -249,16 +252,16 @@ export function useGetBugReportsByModInfinite<TData = InfiniteData<Awaited<Retur
 
 
 
-export const getGetBugReportsByModQueryOptions = <TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetBugReportsByModQueryOptions = <TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetBugReportsByModQueryKey(modId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBugReportsByMod>>> = ({ signal }) => getBugReportsByMod(modId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBugReportsByMod>>> = ({ signal }) => getBugReportsByMod(modId, requestOptions, signal);
 
       
 
@@ -268,36 +271,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetBugReportsByModQueryResult = NonNullable<Awaited<ReturnType<typeof getBugReportsByMod>>>
-export type GetBugReportsByModQueryError = AxiosError<unknown>
+export type GetBugReportsByModQueryError = ErrorType<unknown>
 
 
-export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(
+export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(
  modId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBugReportsByMod>>,
           TError,
           Awaited<ReturnType<typeof getBugReportsByMod>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(
+export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(
  modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBugReportsByMod>>,
           TError,
           Awaited<ReturnType<typeof getBugReportsByMod>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -312,16 +315,16 @@ export function useGetBugReportsByMod<TData = Awaited<ReturnType<typeof getBugRe
 
 
 
-export const getGetBugReportsByModSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetBugReportsByModSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetBugReportsByModQueryKey(modId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBugReportsByMod>>> = ({ signal }) => getBugReportsByMod(modId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBugReportsByMod>>> = ({ signal }) => getBugReportsByMod(modId, requestOptions, signal);
 
       
 
@@ -331,24 +334,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetBugReportsByModSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getBugReportsByMod>>>
-export type GetBugReportsByModSuspenseQueryError = AxiosError<unknown>
+export type GetBugReportsByModSuspenseQueryError = ErrorType<unknown>
 
 
-export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(
- modId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(
+ modId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof getBugReportsByMod>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -363,16 +366,16 @@ export function useGetBugReportsByModSuspense<TData = Awaited<ReturnType<typeof 
 
 
 
-export const getGetBugReportsByModSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetBugReportsByModSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetBugReportsByModQueryKey(modId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBugReportsByMod>>> = ({ signal }) => getBugReportsByMod(modId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBugReportsByMod>>> = ({ signal }) => getBugReportsByMod(modId, requestOptions, signal);
 
       
 
@@ -382,24 +385,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetBugReportsByModSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getBugReportsByMod>>>
-export type GetBugReportsByModSuspenseInfiniteQueryError = AxiosError<unknown>
+export type GetBugReportsByModSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(
- modId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(
+ modId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = AxiosError<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getBugReportsByMod>>>, TError = ErrorType<unknown>>(
+ modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getBugReportsByMod>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -416,36 +419,39 @@ export function useGetBugReportsByModSuspenseInfinite<TData = InfiniteData<Await
 
 export const createBugReport = (
     modId: number,
-    createBugReportRequest: CreateBugReportRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseBugReportResponse>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/bug-reports/${modId}`,
-      createBugReportRequest,options
-    );
-  }
+    createBugReportRequest: BodyType<CreateBugReportRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseBugReportResponse>(
+      {url: `http://localhost:8080/api/v1/bug-reports/${modId}`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createBugReportRequest, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getCreateBugReportMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createBugReport>>, TError,{modId: number;data: CreateBugReportRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof createBugReport>>, TError,{modId: number;data: CreateBugReportRequest}, TContext> => {
+export const getCreateBugReportMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createBugReport>>, TError,{modId: number;data: BodyType<CreateBugReportRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createBugReport>>, TError,{modId: number;data: BodyType<CreateBugReportRequest>}, TContext> => {
 
 const mutationKey = ['createBugReport'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createBugReport>>, {modId: number;data: CreateBugReportRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createBugReport>>, {modId: number;data: BodyType<CreateBugReportRequest>}> = (props) => {
           const {modId,data} = props ?? {};
 
-          return  createBugReport(modId,data,axiosOptions)
+          return  createBugReport(modId,data,requestOptions)
         }
 
         
@@ -454,15 +460,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateBugReportMutationResult = NonNullable<Awaited<ReturnType<typeof createBugReport>>>
-    export type CreateBugReportMutationBody = CreateBugReportRequest
-    export type CreateBugReportMutationError = AxiosError<unknown>
+    export type CreateBugReportMutationBody = BodyType<CreateBugReportRequest>
+    export type CreateBugReportMutationError = ErrorType<unknown>
 
-    export const useCreateBugReport = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createBugReport>>, TError,{modId: number;data: CreateBugReportRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useCreateBugReport = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createBugReport>>, TError,{modId: number;data: BodyType<CreateBugReportRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createBugReport>>,
         TError,
-        {modId: number;data: CreateBugReportRequest},
+        {modId: number;data: BodyType<CreateBugReportRequest>},
         TContext
       > => {
 
@@ -472,36 +478,39 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const commentBugReport = (
     bugReportId: number,
-    createCommentBugReportRequest: CreateCommentBugReportRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseComment>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/bug-reports/${bugReportId}/comment`,
-      createCommentBugReportRequest,options
-    );
-  }
+    createCommentBugReportRequest: BodyType<CreateCommentBugReportRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseComment>(
+      {url: `http://localhost:8080/api/v1/bug-reports/${bugReportId}/comment`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createCommentBugReportRequest, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getCommentBugReportMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentBugReport>>, TError,{bugReportId: number;data: CreateCommentBugReportRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof commentBugReport>>, TError,{bugReportId: number;data: CreateCommentBugReportRequest}, TContext> => {
+export const getCommentBugReportMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentBugReport>>, TError,{bugReportId: number;data: BodyType<CreateCommentBugReportRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof commentBugReport>>, TError,{bugReportId: number;data: BodyType<CreateCommentBugReportRequest>}, TContext> => {
 
 const mutationKey = ['commentBugReport'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof commentBugReport>>, {bugReportId: number;data: CreateCommentBugReportRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof commentBugReport>>, {bugReportId: number;data: BodyType<CreateCommentBugReportRequest>}> = (props) => {
           const {bugReportId,data} = props ?? {};
 
-          return  commentBugReport(bugReportId,data,axiosOptions)
+          return  commentBugReport(bugReportId,data,requestOptions)
         }
 
         
@@ -510,15 +519,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CommentBugReportMutationResult = NonNullable<Awaited<ReturnType<typeof commentBugReport>>>
-    export type CommentBugReportMutationBody = CreateCommentBugReportRequest
-    export type CommentBugReportMutationError = AxiosError<unknown>
+    export type CommentBugReportMutationBody = BodyType<CreateCommentBugReportRequest>
+    export type CommentBugReportMutationError = ErrorType<unknown>
 
-    export const useCommentBugReport = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentBugReport>>, TError,{bugReportId: number;data: CreateCommentBugReportRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useCommentBugReport = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentBugReport>>, TError,{bugReportId: number;data: BodyType<CreateCommentBugReportRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof commentBugReport>>,
         TError,
-        {bugReportId: number;data: CreateCommentBugReportRequest},
+        {bugReportId: number;data: BodyType<CreateCommentBugReportRequest>},
         TContext
       > => {
 
@@ -529,36 +538,39 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     export const replyToComment = (
     bugReportId: number,
     commentId: number,
-    createCommentBugReportRequest: CreateCommentBugReportRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseComment>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/bug-reports/${bugReportId}/comment/${commentId}`,
-      createCommentBugReportRequest,options
-    );
-  }
+    createCommentBugReportRequest: BodyType<CreateCommentBugReportRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseComment>(
+      {url: `http://localhost:8080/api/v1/bug-reports/${bugReportId}/comment/${commentId}`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createCommentBugReportRequest, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getReplyToCommentMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyToComment>>, TError,{bugReportId: number;commentId: number;data: CreateCommentBugReportRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof replyToComment>>, TError,{bugReportId: number;commentId: number;data: CreateCommentBugReportRequest}, TContext> => {
+export const getReplyToCommentMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyToComment>>, TError,{bugReportId: number;commentId: number;data: BodyType<CreateCommentBugReportRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof replyToComment>>, TError,{bugReportId: number;commentId: number;data: BodyType<CreateCommentBugReportRequest>}, TContext> => {
 
 const mutationKey = ['replyToComment'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof replyToComment>>, {bugReportId: number;commentId: number;data: CreateCommentBugReportRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof replyToComment>>, {bugReportId: number;commentId: number;data: BodyType<CreateCommentBugReportRequest>}> = (props) => {
           const {bugReportId,commentId,data} = props ?? {};
 
-          return  replyToComment(bugReportId,commentId,data,axiosOptions)
+          return  replyToComment(bugReportId,commentId,data,requestOptions)
         }
 
         
@@ -567,15 +579,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ReplyToCommentMutationResult = NonNullable<Awaited<ReturnType<typeof replyToComment>>>
-    export type ReplyToCommentMutationBody = CreateCommentBugReportRequest
-    export type ReplyToCommentMutationError = AxiosError<unknown>
+    export type ReplyToCommentMutationBody = BodyType<CreateCommentBugReportRequest>
+    export type ReplyToCommentMutationError = ErrorType<unknown>
 
-    export const useReplyToComment = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyToComment>>, TError,{bugReportId: number;commentId: number;data: CreateCommentBugReportRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useReplyToComment = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyToComment>>, TError,{bugReportId: number;commentId: number;data: BodyType<CreateCommentBugReportRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof replyToComment>>,
         TError,
-        {bugReportId: number;commentId: number;data: CreateCommentBugReportRequest},
+        {bugReportId: number;commentId: number;data: BodyType<CreateCommentBugReportRequest>},
         TContext
       > => {
 
@@ -584,27 +596,28 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     export const deleteBugReport = (
-    bugReportId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.delete(
-      `http://localhost:8080/api/v1/bug-reports/${bugReportId}`,options
-    );
-  }
+    bugReportId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/bug-reports/${bugReportId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
 
-
-export const getDeleteBugReportMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteBugReport>>, TError,{bugReportId: number}, TContext>, axios?: AxiosRequestConfig}
+export const getDeleteBugReportMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteBugReport>>, TError,{bugReportId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteBugReport>>, TError,{bugReportId: number}, TContext> => {
 
 const mutationKey = ['deleteBugReport'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -612,7 +625,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteBugReport>>, {bugReportId: number}> = (props) => {
           const {bugReportId} = props ?? {};
 
-          return  deleteBugReport(bugReportId,axiosOptions)
+          return  deleteBugReport(bugReportId,requestOptions)
         }
 
         
@@ -622,10 +635,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type DeleteBugReportMutationResult = NonNullable<Awaited<ReturnType<typeof deleteBugReport>>>
     
-    export type DeleteBugReportMutationError = AxiosError<unknown>
+    export type DeleteBugReportMutationError = ErrorType<unknown>
 
-    export const useDeleteBugReport = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteBugReport>>, TError,{bugReportId: number}, TContext>, axios?: AxiosRequestConfig}
+    export const useDeleteBugReport = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteBugReport>>, TError,{bugReportId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteBugReport>>,
         TError,

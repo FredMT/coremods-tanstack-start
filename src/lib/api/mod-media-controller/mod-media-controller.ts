@@ -34,13 +34,6 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseImage,
   ApiResponseListImage,
@@ -53,7 +46,11 @@ import type {
   YouTubeVideoUpdateRequest
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType , BodyType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -64,36 +61,38 @@ import type {
 export const updateYouTubeVideo = (
     gameModId: number,
     videoId: number,
-    youTubeVideoUpdateRequest: YouTubeVideoUpdateRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseYouTubeVideoResponse>> => {
-    
-    
-    return axios.default.put(
-      `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos/${videoId}`,
-      youTubeVideoUpdateRequest,options
-    );
-  }
+    youTubeVideoUpdateRequest: BodyType<YouTubeVideoUpdateRequest>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseYouTubeVideoResponse>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos/${videoId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: youTubeVideoUpdateRequest
+    },
+      options);
+    }
+  
 
 
-
-export const getUpdateYouTubeVideoMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: YouTubeVideoUpdateRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: YouTubeVideoUpdateRequest}, TContext> => {
+export const getUpdateYouTubeVideoMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>}, TContext> => {
 
 const mutationKey = ['updateYouTubeVideo'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateYouTubeVideo>>, {gameModId: number;videoId: number;data: YouTubeVideoUpdateRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateYouTubeVideo>>, {gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>}> = (props) => {
           const {gameModId,videoId,data} = props ?? {};
 
-          return  updateYouTubeVideo(gameModId,videoId,data,axiosOptions)
+          return  updateYouTubeVideo(gameModId,videoId,data,requestOptions)
         }
 
         
@@ -102,18 +101,18 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateYouTubeVideoMutationResult = NonNullable<Awaited<ReturnType<typeof updateYouTubeVideo>>>
-    export type UpdateYouTubeVideoMutationBody = YouTubeVideoUpdateRequest
-    export type UpdateYouTubeVideoMutationError = AxiosError<unknown>
+    export type UpdateYouTubeVideoMutationBody = BodyType<YouTubeVideoUpdateRequest>
+    export type UpdateYouTubeVideoMutationError = ErrorType<unknown>
 
     /**
  * @summary Update YouTube video
  */
-export const useUpdateYouTubeVideo = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: YouTubeVideoUpdateRequest}, TContext>, axios?: AxiosRequestConfig}
+export const useUpdateYouTubeVideo = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateYouTubeVideo>>,
         TError,
-        {gameModId: number;videoId: number;data: YouTubeVideoUpdateRequest},
+        {gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>},
         TContext
       > => {
 
@@ -127,27 +126,28 @@ export const useUpdateYouTubeVideo = <TError = AxiosError<unknown>,
  */
 export const deleteYouTubeVideo = (
     gameModId: number,
-    videoId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.delete(
-      `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos/${videoId}`,options
-    );
-  }
+    videoId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos/${videoId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
 
-
-export const getDeleteYouTubeVideoMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteYouTubeVideo>>, TError,{gameModId: number;videoId: number}, TContext>, axios?: AxiosRequestConfig}
+export const getDeleteYouTubeVideoMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteYouTubeVideo>>, TError,{gameModId: number;videoId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteYouTubeVideo>>, TError,{gameModId: number;videoId: number}, TContext> => {
 
 const mutationKey = ['deleteYouTubeVideo'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -155,7 +155,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteYouTubeVideo>>, {gameModId: number;videoId: number}> = (props) => {
           const {gameModId,videoId} = props ?? {};
 
-          return  deleteYouTubeVideo(gameModId,videoId,axiosOptions)
+          return  deleteYouTubeVideo(gameModId,videoId,requestOptions)
         }
 
         
@@ -165,13 +165,13 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type DeleteYouTubeVideoMutationResult = NonNullable<Awaited<ReturnType<typeof deleteYouTubeVideo>>>
     
-    export type DeleteYouTubeVideoMutationError = AxiosError<unknown>
+    export type DeleteYouTubeVideoMutationError = ErrorType<unknown>
 
     /**
  * @summary Delete YouTube video
  */
-export const useDeleteYouTubeVideo = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteYouTubeVideo>>, TError,{gameModId: number;videoId: number}, TContext>, axios?: AxiosRequestConfig}
+export const useDeleteYouTubeVideo = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteYouTubeVideo>>, TError,{gameModId: number;videoId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteYouTubeVideo>>,
         TError,
@@ -188,31 +188,33 @@ export const useDeleteYouTubeVideo = <TError = AxiosError<unknown>,
  * @summary Get YouTube videos
  */
 export const getYouTubeVideos = (
-    gameModId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListYouTubeVideoResponse>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`,options
-    );
-  }
-
+    gameModId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListYouTubeVideoResponse>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetYouTubeVideosQueryKey = (gameModId?: number,) => {
     return [`http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`] as const;
     }
 
     
-export const getGetYouTubeVideosInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetYouTubeVideosInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal);
 
       
 
@@ -222,39 +224,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetYouTubeVideosInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getYouTubeVideos>>>
-export type GetYouTubeVideosInfiniteQueryError = AxiosError<unknown>
+export type GetYouTubeVideosInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(
+export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getYouTubeVideos>>,
           TError,
           Awaited<ReturnType<typeof getYouTubeVideos>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(
+export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getYouTubeVideos>>,
           TError,
           Awaited<ReturnType<typeof getYouTubeVideos>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get YouTube videos
  */
 
-export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -269,16 +271,16 @@ export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnT
 
 
 
-export const getGetYouTubeVideosQueryOptions = <TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetYouTubeVideosQueryOptions = <TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal);
 
       
 
@@ -288,39 +290,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetYouTubeVideosQueryResult = NonNullable<Awaited<ReturnType<typeof getYouTubeVideos>>>
-export type GetYouTubeVideosQueryError = AxiosError<unknown>
+export type GetYouTubeVideosQueryError = ErrorType<unknown>
 
 
-export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(
+export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getYouTubeVideos>>,
           TError,
           Awaited<ReturnType<typeof getYouTubeVideos>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(
+export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getYouTubeVideos>>,
           TError,
           Awaited<ReturnType<typeof getYouTubeVideos>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get YouTube videos
  */
 
-export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -335,16 +337,16 @@ export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTube
 
 
 
-export const getGetYouTubeVideosSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetYouTubeVideosSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal);
 
       
 
@@ -354,27 +356,27 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetYouTubeVideosSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getYouTubeVideos>>>
-export type GetYouTubeVideosSuspenseQueryError = AxiosError<unknown>
+export type GetYouTubeVideosSuspenseQueryError = ErrorType<unknown>
 
 
-export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get YouTube videos
  */
 
-export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -389,16 +391,16 @@ export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof ge
 
 
 
-export const getGetYouTubeVideosSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetYouTubeVideosSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal);
 
       
 
@@ -408,27 +410,27 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetYouTubeVideosSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getYouTubeVideos>>>
-export type GetYouTubeVideosSuspenseInfiniteQueryError = AxiosError<unknown>
+export type GetYouTubeVideosSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get YouTube videos
  */
 
-export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -449,36 +451,39 @@ export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited
  */
 export const addYouTubeVideos = (
     gameModId: number,
-    youTubeVideoRequest: YouTubeVideoRequest[], options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListYouTubeVideoResponse>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`,
-      youTubeVideoRequest,options
-    );
-  }
+    youTubeVideoRequest: BodyType<YouTubeVideoRequest[]>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListYouTubeVideoResponse>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: youTubeVideoRequest, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getAddYouTubeVideosMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: YouTubeVideoRequest[]}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: YouTubeVideoRequest[]}, TContext> => {
+export const getAddYouTubeVideosMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: BodyType<YouTubeVideoRequest[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: BodyType<YouTubeVideoRequest[]>}, TContext> => {
 
 const mutationKey = ['addYouTubeVideos'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addYouTubeVideos>>, {gameModId: number;data: YouTubeVideoRequest[]}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addYouTubeVideos>>, {gameModId: number;data: BodyType<YouTubeVideoRequest[]>}> = (props) => {
           const {gameModId,data} = props ?? {};
 
-          return  addYouTubeVideos(gameModId,data,axiosOptions)
+          return  addYouTubeVideos(gameModId,data,requestOptions)
         }
 
         
@@ -487,18 +492,18 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type AddYouTubeVideosMutationResult = NonNullable<Awaited<ReturnType<typeof addYouTubeVideos>>>
-    export type AddYouTubeVideosMutationBody = YouTubeVideoRequest[]
-    export type AddYouTubeVideosMutationError = AxiosError<unknown>
+    export type AddYouTubeVideosMutationBody = BodyType<YouTubeVideoRequest[]>
+    export type AddYouTubeVideosMutationError = ErrorType<unknown>
 
     /**
  * @summary Add YouTube videos
  */
-export const useAddYouTubeVideos = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: YouTubeVideoRequest[]}, TContext>, axios?: AxiosRequestConfig}
+export const useAddYouTubeVideos = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: BodyType<YouTubeVideoRequest[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof addYouTubeVideos>>,
         TError,
-        {gameModId: number;data: YouTubeVideoRequest[]},
+        {gameModId: number;data: BodyType<YouTubeVideoRequest[]>},
         TContext
       > => {
 
@@ -511,31 +516,33 @@ export const useAddYouTubeVideos = <TError = AxiosError<unknown>,
  * @summary Get mod images
  */
 export const getModImages = (
-    gameModId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListImage>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`,options
-    );
-  }
-
+    gameModId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListImage>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetModImagesQueryKey = (gameModId?: number,) => {
     return [`http://localhost:8080/api/v1/mods/${gameModId}/images/mod`] as const;
     }
 
     
-export const getGetModImagesInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetModImagesInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, requestOptions, signal);
 
       
 
@@ -545,39 +552,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetModImagesInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getModImages>>>
-export type GetModImagesInfiniteQueryError = AxiosError<unknown>
+export type GetModImagesInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(
+export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getModImages>>,
           TError,
           Awaited<ReturnType<typeof getModImages>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(
+export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getModImages>>,
           TError,
           Awaited<ReturnType<typeof getModImages>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get mod images
  */
 
-export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -592,16 +599,16 @@ export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<
 
 
 
-export const getGetModImagesQueryOptions = <TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetModImagesQueryOptions = <TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, requestOptions, signal);
 
       
 
@@ -611,39 +618,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetModImagesQueryResult = NonNullable<Awaited<ReturnType<typeof getModImages>>>
-export type GetModImagesQueryError = AxiosError<unknown>
+export type GetModImagesQueryError = ErrorType<unknown>
 
 
-export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(
+export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getModImages>>,
           TError,
           Awaited<ReturnType<typeof getModImages>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(
+export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getModImages>>,
           TError,
           Awaited<ReturnType<typeof getModImages>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get mod images
  */
 
-export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -658,16 +665,16 @@ export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>
 
 
 
-export const getGetModImagesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetModImagesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, requestOptions, signal);
 
       
 
@@ -677,27 +684,27 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetModImagesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getModImages>>>
-export type GetModImagesSuspenseQueryError = AxiosError<unknown>
+export type GetModImagesSuspenseQueryError = ErrorType<unknown>
 
 
-export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get mod images
  */
 
-export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -712,16 +719,16 @@ export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getMod
 
 
 
-export const getGetModImagesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetModImagesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, requestOptions, signal);
 
       
 
@@ -731,27 +738,27 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetModImagesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getModImages>>>
-export type GetModImagesSuspenseInfiniteQueryError = AxiosError<unknown>
+export type GetModImagesSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get mod images
  */
 
-export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -768,36 +775,39 @@ export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<Ret
 
 export const uploadModImage = (
     gameModId: number,
-    uploadModImageBody: UploadModImageBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseImage>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`,
-      uploadModImageBody,options
-    );
-  }
+    uploadModImageBody: BodyType<UploadModImageBody>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseImage>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: uploadModImageBody, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getUploadModImageMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: UploadModImageBody}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: UploadModImageBody}, TContext> => {
+export const getUploadModImageMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: BodyType<UploadModImageBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: BodyType<UploadModImageBody>}, TContext> => {
 
 const mutationKey = ['uploadModImage'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadModImage>>, {gameModId: number;data: UploadModImageBody}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadModImage>>, {gameModId: number;data: BodyType<UploadModImageBody>}> = (props) => {
           const {gameModId,data} = props ?? {};
 
-          return  uploadModImage(gameModId,data,axiosOptions)
+          return  uploadModImage(gameModId,data,requestOptions)
         }
 
         
@@ -806,15 +816,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UploadModImageMutationResult = NonNullable<Awaited<ReturnType<typeof uploadModImage>>>
-    export type UploadModImageMutationBody = UploadModImageBody
-    export type UploadModImageMutationError = AxiosError<unknown>
+    export type UploadModImageMutationBody = BodyType<UploadModImageBody>
+    export type UploadModImageMutationError = ErrorType<unknown>
 
-    export const useUploadModImage = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: UploadModImageBody}, TContext>, axios?: AxiosRequestConfig}
+    export const useUploadModImage = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: BodyType<UploadModImageBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof uploadModImage>>,
         TError,
-        {gameModId: number;data: UploadModImageBody},
+        {gameModId: number;data: BodyType<UploadModImageBody>},
         TContext
       > => {
 
@@ -827,31 +837,33 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
  * @summary Get header image for mod
  */
 export const getHeaderImage = (
-    gameModId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseImage>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/mods/${gameModId}/images/header`,options
-    );
-  }
-
+    gameModId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseImage>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/header`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetHeaderImageQueryKey = (gameModId?: number,) => {
     return [`http://localhost:8080/api/v1/mods/${gameModId}/images/header`] as const;
     }
 
     
-export const getGetHeaderImageInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetHeaderImageInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal);
 
       
 
@@ -861,39 +873,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetHeaderImageInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getHeaderImage>>>
-export type GetHeaderImageInfiniteQueryError = AxiosError<unknown>
+export type GetHeaderImageInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(
+export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHeaderImage>>,
           TError,
           Awaited<ReturnType<typeof getHeaderImage>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(
+export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHeaderImage>>,
           TError,
           Awaited<ReturnType<typeof getHeaderImage>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get header image for mod
  */
 
-export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -908,16 +920,16 @@ export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnTyp
 
 
 
-export const getGetHeaderImageQueryOptions = <TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetHeaderImageQueryOptions = <TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal);
 
       
 
@@ -927,39 +939,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetHeaderImageQueryResult = NonNullable<Awaited<ReturnType<typeof getHeaderImage>>>
-export type GetHeaderImageQueryError = AxiosError<unknown>
+export type GetHeaderImageQueryError = ErrorType<unknown>
 
 
-export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(
+export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHeaderImage>>,
           TError,
           Awaited<ReturnType<typeof getHeaderImage>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(
+export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHeaderImage>>,
           TError,
           Awaited<ReturnType<typeof getHeaderImage>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get header image for mod
  */
 
-export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -974,16 +986,16 @@ export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderIma
 
 
 
-export const getGetHeaderImageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetHeaderImageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal);
 
       
 
@@ -993,27 +1005,27 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetHeaderImageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getHeaderImage>>>
-export type GetHeaderImageSuspenseQueryError = AxiosError<unknown>
+export type GetHeaderImageSuspenseQueryError = ErrorType<unknown>
 
 
-export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get header image for mod
  */
 
-export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1028,16 +1040,16 @@ export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getH
 
 
 
-export const getGetHeaderImageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetHeaderImageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal);
 
       
 
@@ -1047,27 +1059,27 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetHeaderImageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getHeaderImage>>>
-export type GetHeaderImageSuspenseInfiniteQueryError = AxiosError<unknown>
+export type GetHeaderImageSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get header image for mod
  */
 
-export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1084,36 +1096,39 @@ export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<R
 
 export const uploadHeaderImage = (
     gameModId: number,
-    uploadHeaderImageBody: UploadHeaderImageBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseImage>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/mods/${gameModId}/images/header`,
-      uploadHeaderImageBody,options
-    );
-  }
+    uploadHeaderImageBody: BodyType<UploadHeaderImageBody>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseImage>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/header`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: uploadHeaderImageBody, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getUploadHeaderImageMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: UploadHeaderImageBody}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: UploadHeaderImageBody}, TContext> => {
+export const getUploadHeaderImageMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: BodyType<UploadHeaderImageBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: BodyType<UploadHeaderImageBody>}, TContext> => {
 
 const mutationKey = ['uploadHeaderImage'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadHeaderImage>>, {gameModId: number;data: UploadHeaderImageBody}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadHeaderImage>>, {gameModId: number;data: BodyType<UploadHeaderImageBody>}> = (props) => {
           const {gameModId,data} = props ?? {};
 
-          return  uploadHeaderImage(gameModId,data,axiosOptions)
+          return  uploadHeaderImage(gameModId,data,requestOptions)
         }
 
         
@@ -1122,15 +1137,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UploadHeaderImageMutationResult = NonNullable<Awaited<ReturnType<typeof uploadHeaderImage>>>
-    export type UploadHeaderImageMutationBody = UploadHeaderImageBody
-    export type UploadHeaderImageMutationError = AxiosError<unknown>
+    export type UploadHeaderImageMutationBody = BodyType<UploadHeaderImageBody>
+    export type UploadHeaderImageMutationError = ErrorType<unknown>
 
-    export const useUploadHeaderImage = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: UploadHeaderImageBody}, TContext>, axios?: AxiosRequestConfig}
+    export const useUploadHeaderImage = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: BodyType<UploadHeaderImageBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof uploadHeaderImage>>,
         TError,
-        {gameModId: number;data: UploadHeaderImageBody},
+        {gameModId: number;data: BodyType<UploadHeaderImageBody>},
         TContext
       > => {
 
@@ -1143,31 +1158,33 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
  * @summary Get all images for mod
  */
 export const getImages = (
-    gameModId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListImage>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/mods/${gameModId}/images`,options
-    );
-  }
-
+    gameModId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListImage>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetImagesQueryKey = (gameModId?: number,) => {
     return [`http://localhost:8080/api/v1/mods/${gameModId}/images`] as const;
     }
 
     
-export const getGetImagesInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetImagesInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, requestOptions, signal);
 
       
 
@@ -1177,39 +1194,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetImagesInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getImages>>>
-export type GetImagesInfiniteQueryError = AxiosError<unknown>
+export type GetImagesInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(
+export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getImages>>,
           TError,
           Awaited<ReturnType<typeof getImages>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(
+export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getImages>>,
           TError,
           Awaited<ReturnType<typeof getImages>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get all images for mod
  */
 
-export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1224,16 +1241,16 @@ export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typ
 
 
 
-export const getGetImagesQueryOptions = <TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetImagesQueryOptions = <TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, requestOptions, signal);
 
       
 
@@ -1243,39 +1260,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetImagesQueryResult = NonNullable<Awaited<ReturnType<typeof getImages>>>
-export type GetImagesQueryError = AxiosError<unknown>
+export type GetImagesQueryError = ErrorType<unknown>
 
 
-export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(
+export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getImages>>,
           TError,
           Awaited<ReturnType<typeof getImages>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(
+export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getImages>>,
           TError,
           Awaited<ReturnType<typeof getImages>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get all images for mod
  */
 
-export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1290,16 +1307,16 @@ export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TErr
 
 
 
-export const getGetImagesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetImagesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, requestOptions, signal);
 
       
 
@@ -1309,27 +1326,27 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetImagesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getImages>>>
-export type GetImagesSuspenseQueryError = AxiosError<unknown>
+export type GetImagesSuspenseQueryError = ErrorType<unknown>
 
 
-export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get all images for mod
  */
 
-export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1344,16 +1361,16 @@ export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages
 
 
 
-export const getGetImagesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetImagesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, requestOptions, signal);
 
       
 
@@ -1363,27 +1380,27 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetImagesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getImages>>>
-export type GetImagesSuspenseInfiniteQueryError = AxiosError<unknown>
+export type GetImagesSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get all images for mod
  */
 
-export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1404,27 +1421,28 @@ export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<Return
  */
 export const deleteImage = (
     gameModId: number,
-    imageId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.delete(
-      `http://localhost:8080/api/v1/mods/${gameModId}/images/${imageId}`,options
-    );
-  }
+    imageId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/${imageId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
 
-
-export const getDeleteImageMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImage>>, TError,{gameModId: number;imageId: number}, TContext>, axios?: AxiosRequestConfig}
+export const getDeleteImageMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImage>>, TError,{gameModId: number;imageId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteImage>>, TError,{gameModId: number;imageId: number}, TContext> => {
 
 const mutationKey = ['deleteImage'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -1432,7 +1450,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteImage>>, {gameModId: number;imageId: number}> = (props) => {
           const {gameModId,imageId} = props ?? {};
 
-          return  deleteImage(gameModId,imageId,axiosOptions)
+          return  deleteImage(gameModId,imageId,requestOptions)
         }
 
         
@@ -1442,13 +1460,13 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type DeleteImageMutationResult = NonNullable<Awaited<ReturnType<typeof deleteImage>>>
     
-    export type DeleteImageMutationError = AxiosError<unknown>
+    export type DeleteImageMutationError = ErrorType<unknown>
 
     /**
  * @summary Delete image
  */
-export const useDeleteImage = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImage>>, TError,{gameModId: number;imageId: number}, TContext>, axios?: AxiosRequestConfig}
+export const useDeleteImage = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImage>>, TError,{gameModId: number;imageId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteImage>>,
         TError,

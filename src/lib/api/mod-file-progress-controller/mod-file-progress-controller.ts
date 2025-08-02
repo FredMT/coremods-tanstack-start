@@ -30,47 +30,46 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   SseEmitter
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const trackProgress = (
-    progressId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<SseEmitter>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/uploads/${progressId}`,options
-    );
-  }
-
+    progressId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<SseEmitter>(
+      {url: `http://localhost:8080/api/v1/uploads/${progressId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getTrackProgressQueryKey = (progressId?: string,) => {
     return [`http://localhost:8080/api/v1/uploads/${progressId}`] as const;
     }
 
     
-export const getTrackProgressInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(progressId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getTrackProgressInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(progressId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getTrackProgressQueryKey(progressId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof trackProgress>>> = ({ signal }) => trackProgress(progressId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof trackProgress>>> = ({ signal }) => trackProgress(progressId, requestOptions, signal);
 
       
 
@@ -80,36 +79,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type TrackProgressInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof trackProgress>>>
-export type TrackProgressInfiniteQueryError = AxiosError<unknown>
+export type TrackProgressInfiniteQueryError = ErrorType<unknown>
 
 
-export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(
+export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(
  progressId: string, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof trackProgress>>,
           TError,
           Awaited<ReturnType<typeof trackProgress>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(
+export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(
  progressId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof trackProgress>>,
           TError,
           Awaited<ReturnType<typeof trackProgress>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -124,16 +123,16 @@ export function useTrackProgressInfinite<TData = InfiniteData<Awaited<ReturnType
 
 
 
-export const getTrackProgressQueryOptions = <TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(progressId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getTrackProgressQueryOptions = <TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(progressId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getTrackProgressQueryKey(progressId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof trackProgress>>> = ({ signal }) => trackProgress(progressId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof trackProgress>>> = ({ signal }) => trackProgress(progressId, requestOptions, signal);
 
       
 
@@ -143,36 +142,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type TrackProgressQueryResult = NonNullable<Awaited<ReturnType<typeof trackProgress>>>
-export type TrackProgressQueryError = AxiosError<unknown>
+export type TrackProgressQueryError = ErrorType<unknown>
 
 
-export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(
+export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(
  progressId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof trackProgress>>,
           TError,
           Awaited<ReturnType<typeof trackProgress>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(
+export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(
  progressId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof trackProgress>>,
           TError,
           Awaited<ReturnType<typeof trackProgress>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -187,16 +186,16 @@ export function useTrackProgress<TData = Awaited<ReturnType<typeof trackProgress
 
 
 
-export const getTrackProgressSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(progressId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getTrackProgressSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(progressId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getTrackProgressQueryKey(progressId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof trackProgress>>> = ({ signal }) => trackProgress(progressId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof trackProgress>>> = ({ signal }) => trackProgress(progressId, requestOptions, signal);
 
       
 
@@ -206,24 +205,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type TrackProgressSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof trackProgress>>>
-export type TrackProgressSuspenseQueryError = AxiosError<unknown>
+export type TrackProgressSuspenseQueryError = ErrorType<unknown>
 
 
-export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(
- progressId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(
+ progressId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof trackProgress>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof trackProgress>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -238,16 +237,16 @@ export function useTrackProgressSuspense<TData = Awaited<ReturnType<typeof track
 
 
 
-export const getTrackProgressSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(progressId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getTrackProgressSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(progressId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getTrackProgressQueryKey(progressId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof trackProgress>>> = ({ signal }) => trackProgress(progressId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof trackProgress>>> = ({ signal }) => trackProgress(progressId, requestOptions, signal);
 
       
 
@@ -257,24 +256,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type TrackProgressSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof trackProgress>>>
-export type TrackProgressSuspenseInfiniteQueryError = AxiosError<unknown>
+export type TrackProgressSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useTrackProgressSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(
- progressId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(
+ progressId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrackProgressSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrackProgressSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useTrackProgressSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = AxiosError<unknown>>(
- progressId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTrackProgressSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof trackProgress>>>, TError = ErrorType<unknown>>(
+ progressId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof trackProgress>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

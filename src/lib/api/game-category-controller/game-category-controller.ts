@@ -14,43 +14,42 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseVoid
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const createPresetCategories = (
-    gameId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/games/categories/${gameId}/create-preset-categories`,undefined,options
-    );
-  }
+    gameId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/games/categories/${gameId}/create-preset-categories`, method: 'POST', signal
+    },
+      options);
+    }
+  
 
 
-
-export const getCreatePresetCategoriesMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPresetCategories>>, TError,{gameId: number}, TContext>, axios?: AxiosRequestConfig}
+export const getCreatePresetCategoriesMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPresetCategories>>, TError,{gameId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createPresetCategories>>, TError,{gameId: number}, TContext> => {
 
 const mutationKey = ['createPresetCategories'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -58,7 +57,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPresetCategories>>, {gameId: number}> = (props) => {
           const {gameId} = props ?? {};
 
-          return  createPresetCategories(gameId,axiosOptions)
+          return  createPresetCategories(gameId,requestOptions)
         }
 
         
@@ -68,10 +67,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type CreatePresetCategoriesMutationResult = NonNullable<Awaited<ReturnType<typeof createPresetCategories>>>
     
-    export type CreatePresetCategoriesMutationError = AxiosError<unknown>
+    export type CreatePresetCategoriesMutationError = ErrorType<unknown>
 
-    export const useCreatePresetCategories = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPresetCategories>>, TError,{gameId: number}, TContext>, axios?: AxiosRequestConfig}
+    export const useCreatePresetCategories = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPresetCategories>>, TError,{gameId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createPresetCategories>>,
         TError,

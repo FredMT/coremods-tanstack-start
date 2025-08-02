@@ -30,50 +30,48 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseListModSearchResponse,
   SearchModsParams
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const searchMods = (
-    params: SearchModsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListModSearchResponse>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/mods/search`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params: SearchModsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListModSearchResponse>(
+      {url: `http://localhost:8080/api/v1/mods/search`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
 export const getSearchModsQueryKey = (params?: SearchModsParams,) => {
     return [`http://localhost:8080/api/v1/mods/search`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getSearchModsInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(params: SearchModsParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSearchModsInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(params: SearchModsParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchModsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMods>>> = ({ signal }) => searchMods(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMods>>> = ({ signal }) => searchMods(params, requestOptions, signal);
 
       
 
@@ -83,36 +81,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type SearchModsInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof searchMods>>>
-export type SearchModsInfiniteQueryError = AxiosError<unknown>
+export type SearchModsInfiniteQueryError = ErrorType<unknown>
 
 
-export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(
+export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(
  params: SearchModsParams, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof searchMods>>,
           TError,
           Awaited<ReturnType<typeof searchMods>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(
+export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(
  params: SearchModsParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof searchMods>>,
           TError,
           Awaited<ReturnType<typeof searchMods>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -127,16 +125,16 @@ export function useSearchModsInfinite<TData = InfiniteData<Awaited<ReturnType<ty
 
 
 
-export const getSearchModsQueryOptions = <TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(params: SearchModsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSearchModsQueryOptions = <TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(params: SearchModsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchModsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMods>>> = ({ signal }) => searchMods(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMods>>> = ({ signal }) => searchMods(params, requestOptions, signal);
 
       
 
@@ -146,36 +144,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type SearchModsQueryResult = NonNullable<Awaited<ReturnType<typeof searchMods>>>
-export type SearchModsQueryError = AxiosError<unknown>
+export type SearchModsQueryError = ErrorType<unknown>
 
 
-export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(
+export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(
  params: SearchModsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof searchMods>>,
           TError,
           Awaited<ReturnType<typeof searchMods>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(
+export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(
  params: SearchModsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof searchMods>>,
           TError,
           Awaited<ReturnType<typeof searchMods>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -190,16 +188,16 @@ export function useSearchMods<TData = Awaited<ReturnType<typeof searchMods>>, TE
 
 
 
-export const getSearchModsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(params: SearchModsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSearchModsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(params: SearchModsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchModsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMods>>> = ({ signal }) => searchMods(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMods>>> = ({ signal }) => searchMods(params, requestOptions, signal);
 
       
 
@@ -209,24 +207,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type SearchModsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof searchMods>>>
-export type SearchModsSuspenseQueryError = AxiosError<unknown>
+export type SearchModsSuspenseQueryError = ErrorType<unknown>
 
 
-export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMods>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMods>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -241,16 +239,16 @@ export function useSearchModsSuspense<TData = Awaited<ReturnType<typeof searchMo
 
 
 
-export const getSearchModsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(params: SearchModsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSearchModsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(params: SearchModsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchModsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMods>>> = ({ signal }) => searchMods(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMods>>> = ({ signal }) => searchMods(params, requestOptions, signal);
 
       
 
@@ -260,24 +258,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type SearchModsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof searchMods>>>
-export type SearchModsSuspenseInfiniteQueryError = AxiosError<unknown>
+export type SearchModsSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useSearchModsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchModsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchModsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useSearchModsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = AxiosError<unknown>>(
- params: SearchModsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchModsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchMods>>>, TError = ErrorType<unknown>>(
+ params: SearchModsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchMods>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

@@ -18,8 +18,10 @@ import { getCsrfToken } from '@/fn/getCsrfToken'
 import { getUser } from '@/fn/getUser'
 import appCss from '@/styles/app.css?url'
 import { ResAuthUser } from '@/types/ResAuthUser'
+import { wrapCreateRootRouteWithSentry } from '@sentry/tanstackstart-react'
 import type { QueryClient } from '@tanstack/react-query'
-export const Route = createRootRouteWithContext<{
+
+export const Route = wrapCreateRootRouteWithSentry(createRootRouteWithContext)<{
     queryClient: QueryClient
     user: ResAuthUser | null
 }>()({
@@ -55,6 +57,7 @@ export const Route = createRootRouteWithContext<{
     beforeLoad: async () => {
         await getCsrfToken()
         const res = await getUser()
+
         return {
             user: res?.data || null,
         }

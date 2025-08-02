@@ -14,55 +14,55 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseVoid,
   ModDetailsRequest,
   ModRequirementsMirrorsRequest
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType , BodyType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const saveModRequirementsMirrors = (
     modId: number,
-    modRequirementsMirrorsRequest: ModRequirementsMirrorsRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/mods/${modId}/upload/requirements-mirrors`,
-      modRequirementsMirrorsRequest,options
-    );
-  }
+    modRequirementsMirrorsRequest: BodyType<ModRequirementsMirrorsRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/mods/${modId}/upload/requirements-mirrors`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: modRequirementsMirrorsRequest, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getSaveModRequirementsMirrorsMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: ModRequirementsMirrorsRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: ModRequirementsMirrorsRequest}, TContext> => {
+export const getSaveModRequirementsMirrorsMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: BodyType<ModRequirementsMirrorsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: BodyType<ModRequirementsMirrorsRequest>}, TContext> => {
 
 const mutationKey = ['saveModRequirementsMirrors'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, {modId: number;data: ModRequirementsMirrorsRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, {modId: number;data: BodyType<ModRequirementsMirrorsRequest>}> = (props) => {
           const {modId,data} = props ?? {};
 
-          return  saveModRequirementsMirrors(modId,data,axiosOptions)
+          return  saveModRequirementsMirrors(modId,data,requestOptions)
         }
 
         
@@ -71,15 +71,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type SaveModRequirementsMirrorsMutationResult = NonNullable<Awaited<ReturnType<typeof saveModRequirementsMirrors>>>
-    export type SaveModRequirementsMirrorsMutationBody = ModRequirementsMirrorsRequest
-    export type SaveModRequirementsMirrorsMutationError = AxiosError<unknown>
+    export type SaveModRequirementsMirrorsMutationBody = BodyType<ModRequirementsMirrorsRequest>
+    export type SaveModRequirementsMirrorsMutationError = ErrorType<unknown>
 
-    export const useSaveModRequirementsMirrors = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: ModRequirementsMirrorsRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useSaveModRequirementsMirrors = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: BodyType<ModRequirementsMirrorsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof saveModRequirementsMirrors>>,
         TError,
-        {modId: number;data: ModRequirementsMirrorsRequest},
+        {modId: number;data: BodyType<ModRequirementsMirrorsRequest>},
         TContext
       > => {
 
@@ -88,27 +88,29 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     export const publishMod = (
-    modId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/mods/${modId}/publish`,undefined,options
-    );
-  }
+    modId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/mods/${modId}/publish`, method: 'POST', signal
+    },
+      options);
+    }
+  
 
 
-
-export const getPublishModMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishMod>>, TError,{modId: number}, TContext>, axios?: AxiosRequestConfig}
+export const getPublishModMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishMod>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof publishMod>>, TError,{modId: number}, TContext> => {
 
 const mutationKey = ['publishMod'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -116,7 +118,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof publishMod>>, {modId: number}> = (props) => {
           const {modId} = props ?? {};
 
-          return  publishMod(modId,axiosOptions)
+          return  publishMod(modId,requestOptions)
         }
 
         
@@ -126,10 +128,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type PublishModMutationResult = NonNullable<Awaited<ReturnType<typeof publishMod>>>
     
-    export type PublishModMutationError = AxiosError<unknown>
+    export type PublishModMutationError = ErrorType<unknown>
 
-    export const usePublishMod = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishMod>>, TError,{modId: number}, TContext>, axios?: AxiosRequestConfig}
+    export const usePublishMod = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishMod>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof publishMod>>,
         TError,
@@ -142,36 +144,39 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     export const saveModDetails = (
-    modDetailsRequest: ModDetailsRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/mods/upload/details`,
-      modDetailsRequest,options
-    );
-  }
+    modDetailsRequest: BodyType<ModDetailsRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/mods/upload/details`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: modDetailsRequest, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getSaveModDetailsMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: ModDetailsRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: ModDetailsRequest}, TContext> => {
+export const getSaveModDetailsMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: BodyType<ModDetailsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: BodyType<ModDetailsRequest>}, TContext> => {
 
 const mutationKey = ['saveModDetails'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveModDetails>>, {data: ModDetailsRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveModDetails>>, {data: BodyType<ModDetailsRequest>}> = (props) => {
           const {data} = props ?? {};
 
-          return  saveModDetails(data,axiosOptions)
+          return  saveModDetails(data,requestOptions)
         }
 
         
@@ -180,15 +185,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type SaveModDetailsMutationResult = NonNullable<Awaited<ReturnType<typeof saveModDetails>>>
-    export type SaveModDetailsMutationBody = ModDetailsRequest
-    export type SaveModDetailsMutationError = AxiosError<unknown>
+    export type SaveModDetailsMutationBody = BodyType<ModDetailsRequest>
+    export type SaveModDetailsMutationError = ErrorType<unknown>
 
-    export const useSaveModDetails = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: ModDetailsRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useSaveModDetails = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: BodyType<ModDetailsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof saveModDetails>>,
         TError,
-        {data: ModDetailsRequest},
+        {data: BodyType<ModDetailsRequest>},
         TContext
       > => {
 

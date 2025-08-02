@@ -30,50 +30,48 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseListGameSummaryResponse,
   SearchGamesParams
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const searchGames = (
-    params: SearchGamesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListGameSummaryResponse>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/games/search`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params: SearchGamesParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListGameSummaryResponse>(
+      {url: `http://localhost:8080/api/v1/games/search`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
 export const getSearchGamesQueryKey = (params?: SearchGamesParams,) => {
     return [`http://localhost:8080/api/v1/games/search`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getSearchGamesInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(params: SearchGamesParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSearchGamesInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(params: SearchGamesParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchGamesQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchGames>>> = ({ signal }) => searchGames(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchGames>>> = ({ signal }) => searchGames(params, requestOptions, signal);
 
       
 
@@ -83,36 +81,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type SearchGamesInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof searchGames>>>
-export type SearchGamesInfiniteQueryError = AxiosError<unknown>
+export type SearchGamesInfiniteQueryError = ErrorType<unknown>
 
 
-export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(
+export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(
  params: SearchGamesParams, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof searchGames>>,
           TError,
           Awaited<ReturnType<typeof searchGames>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(
+export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(
  params: SearchGamesParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof searchGames>>,
           TError,
           Awaited<ReturnType<typeof searchGames>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -127,16 +125,16 @@ export function useSearchGamesInfinite<TData = InfiniteData<Awaited<ReturnType<t
 
 
 
-export const getSearchGamesQueryOptions = <TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(params: SearchGamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSearchGamesQueryOptions = <TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(params: SearchGamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchGamesQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchGames>>> = ({ signal }) => searchGames(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchGames>>> = ({ signal }) => searchGames(params, requestOptions, signal);
 
       
 
@@ -146,36 +144,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type SearchGamesQueryResult = NonNullable<Awaited<ReturnType<typeof searchGames>>>
-export type SearchGamesQueryError = AxiosError<unknown>
+export type SearchGamesQueryError = ErrorType<unknown>
 
 
-export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(
+export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(
  params: SearchGamesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof searchGames>>,
           TError,
           Awaited<ReturnType<typeof searchGames>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(
+export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(
  params: SearchGamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof searchGames>>,
           TError,
           Awaited<ReturnType<typeof searchGames>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -190,16 +188,16 @@ export function useSearchGames<TData = Awaited<ReturnType<typeof searchGames>>, 
 
 
 
-export const getSearchGamesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(params: SearchGamesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSearchGamesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(params: SearchGamesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchGamesQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchGames>>> = ({ signal }) => searchGames(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchGames>>> = ({ signal }) => searchGames(params, requestOptions, signal);
 
       
 
@@ -209,24 +207,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type SearchGamesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof searchGames>>>
-export type SearchGamesSuspenseQueryError = AxiosError<unknown>
+export type SearchGamesSuspenseQueryError = ErrorType<unknown>
 
 
-export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchGames>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchGames>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -241,16 +239,16 @@ export function useSearchGamesSuspense<TData = Awaited<ReturnType<typeof searchG
 
 
 
-export const getSearchGamesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(params: SearchGamesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSearchGamesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(params: SearchGamesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchGamesQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchGames>>> = ({ signal }) => searchGames(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof searchGames>>> = ({ signal }) => searchGames(params, requestOptions, signal);
 
       
 
@@ -260,24 +258,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type SearchGamesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof searchGames>>>
-export type SearchGamesSuspenseInfiniteQueryError = AxiosError<unknown>
+export type SearchGamesSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useSearchGamesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchGamesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSearchGamesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useSearchGamesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = AxiosError<unknown>>(
- params: SearchGamesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useSearchGamesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof searchGames>>>, TError = ErrorType<unknown>>(
+ params: SearchGamesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof searchGames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

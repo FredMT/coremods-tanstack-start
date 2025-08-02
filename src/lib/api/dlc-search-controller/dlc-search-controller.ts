@@ -30,47 +30,46 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseListDLCResponse
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const getGameDLCs = (
-    gameId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListDLCResponse>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/games/${gameId}/dlcs`,options
-    );
-  }
-
+    gameId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListDLCResponse>(
+      {url: `http://localhost:8080/api/v1/games/${gameId}/dlcs`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetGameDLCsQueryKey = (gameId?: number,) => {
     return [`http://localhost:8080/api/v1/games/${gameId}/dlcs`] as const;
     }
 
     
-export const getGetGameDLCsInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetGameDLCsInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, requestOptions, signal);
 
       
 
@@ -80,36 +79,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetGameDLCsInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGameDLCs>>>
-export type GetGameDLCsInfiniteQueryError = AxiosError<unknown>
+export type GetGameDLCsInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(
+export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
  gameId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGameDLCs>>,
           TError,
           Awaited<ReturnType<typeof getGameDLCs>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(
+export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
  gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGameDLCs>>,
           TError,
           Awaited<ReturnType<typeof getGameDLCs>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -124,16 +123,16 @@ export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<t
 
 
 
-export const getGetGameDLCsQueryOptions = <TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetGameDLCsQueryOptions = <TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, requestOptions, signal);
 
       
 
@@ -143,36 +142,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetGameDLCsQueryResult = NonNullable<Awaited<ReturnType<typeof getGameDLCs>>>
-export type GetGameDLCsQueryError = AxiosError<unknown>
+export type GetGameDLCsQueryError = ErrorType<unknown>
 
 
-export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(
+export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
  gameId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGameDLCs>>,
           TError,
           Awaited<ReturnType<typeof getGameDLCs>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(
+export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
  gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGameDLCs>>,
           TError,
           Awaited<ReturnType<typeof getGameDLCs>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -187,16 +186,16 @@ export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, 
 
 
 
-export const getGetGameDLCsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetGameDLCsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, requestOptions, signal);
 
       
 
@@ -206,24 +205,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetGameDLCsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGameDLCs>>>
-export type GetGameDLCsSuspenseQueryError = AxiosError<unknown>
+export type GetGameDLCsSuspenseQueryError = ErrorType<unknown>
 
 
-export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(
- gameId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
+ gameId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -238,16 +237,16 @@ export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGame
 
 
 
-export const getGetGameDLCsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetGameDLCsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, requestOptions, signal);
 
       
 
@@ -257,24 +256,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetGameDLCsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGameDLCs>>>
-export type GetGameDLCsSuspenseInfiniteQueryError = AxiosError<unknown>
+export type GetGameDLCsSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(
- gameId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
+ gameId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = AxiosError<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
+ gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

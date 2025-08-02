@@ -14,13 +14,6 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseModFileEditResponse,
   ApiResponseModFileUploadResponse,
@@ -29,43 +22,49 @@ import type {
   UploadModFileParams
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType , BodyType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const editModFile = (
     modId: number,
     fileId: number,
-    modFileEditRequest: ModFileEditRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseModFileEditResponse>> => {
-    
-    
-    return axios.default.put(
-      `http://localhost:8080/api/v1/mods/${modId}/files/${fileId}`,
-      modFileEditRequest,options
-    );
-  }
+    modFileEditRequest: BodyType<ModFileEditRequest>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseModFileEditResponse>(
+      {url: `http://localhost:8080/api/v1/mods/${modId}/files/${fileId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: modFileEditRequest
+    },
+      options);
+    }
+  
 
 
-
-export const getEditModFileMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: ModFileEditRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: ModFileEditRequest}, TContext> => {
+export const getEditModFileMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: BodyType<ModFileEditRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: BodyType<ModFileEditRequest>}, TContext> => {
 
 const mutationKey = ['editModFile'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof editModFile>>, {modId: number;fileId: number;data: ModFileEditRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof editModFile>>, {modId: number;fileId: number;data: BodyType<ModFileEditRequest>}> = (props) => {
           const {modId,fileId,data} = props ?? {};
 
-          return  editModFile(modId,fileId,data,axiosOptions)
+          return  editModFile(modId,fileId,data,requestOptions)
         }
 
         
@@ -74,15 +73,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type EditModFileMutationResult = NonNullable<Awaited<ReturnType<typeof editModFile>>>
-    export type EditModFileMutationBody = ModFileEditRequest
-    export type EditModFileMutationError = AxiosError<unknown>
+    export type EditModFileMutationBody = BodyType<ModFileEditRequest>
+    export type EditModFileMutationError = ErrorType<unknown>
 
-    export const useEditModFile = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: ModFileEditRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useEditModFile = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: BodyType<ModFileEditRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof editModFile>>,
         TError,
-        {modId: number;fileId: number;data: ModFileEditRequest},
+        {modId: number;fileId: number;data: BodyType<ModFileEditRequest>},
         TContext
       > => {
 
@@ -92,41 +91,43 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const uploadModFile = (
     modId: number,
-    uploadModFileBody: UploadModFileBody,
-    params: UploadModFileParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseModFileUploadResponse>> => {
-    
-    const formData = new FormData();
+    uploadModFileBody: BodyType<UploadModFileBody>,
+    params: UploadModFileParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      const formData = new FormData();
 formData.append(`archiveFile`, uploadModFileBody.archiveFile)
 
-    return axios.default.post(
-      `http://localhost:8080/api/v1/mods/${modId}/files`,
-      formData,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+      return customInstance<ApiResponseModFileUploadResponse>(
+      {url: `http://localhost:8080/api/v1/mods/${modId}/files`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData,
+        params, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getUploadModFileMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: UploadModFileBody;params: UploadModFileParams}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: UploadModFileBody;params: UploadModFileParams}, TContext> => {
+export const getUploadModFileMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams}, TContext> => {
 
 const mutationKey = ['uploadModFile'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadModFile>>, {modId: number;data: UploadModFileBody;params: UploadModFileParams}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadModFile>>, {modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams}> = (props) => {
           const {modId,data,params} = props ?? {};
 
-          return  uploadModFile(modId,data,params,axiosOptions)
+          return  uploadModFile(modId,data,params,requestOptions)
         }
 
         
@@ -135,15 +136,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UploadModFileMutationResult = NonNullable<Awaited<ReturnType<typeof uploadModFile>>>
-    export type UploadModFileMutationBody = UploadModFileBody
-    export type UploadModFileMutationError = AxiosError<unknown>
+    export type UploadModFileMutationBody = BodyType<UploadModFileBody>
+    export type UploadModFileMutationError = ErrorType<unknown>
 
-    export const useUploadModFile = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: UploadModFileBody;params: UploadModFileParams}, TContext>, axios?: AxiosRequestConfig}
+    export const useUploadModFile = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof uploadModFile>>,
         TError,
-        {modId: number;data: UploadModFileBody;params: UploadModFileParams},
+        {modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams},
         TContext
       > => {
 

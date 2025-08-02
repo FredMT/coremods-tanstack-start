@@ -14,43 +14,42 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseVoid
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const endorseMod = (
-    modId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/mods/${modId}/endorsements`,undefined,options
-    );
-  }
+    modId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/mods/${modId}/endorsements`, method: 'POST', signal
+    },
+      options);
+    }
+  
 
 
-
-export const getEndorseModMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof endorseMod>>, TError,{modId: number}, TContext>, axios?: AxiosRequestConfig}
+export const getEndorseModMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof endorseMod>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof endorseMod>>, TError,{modId: number}, TContext> => {
 
 const mutationKey = ['endorseMod'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -58,7 +57,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof endorseMod>>, {modId: number}> = (props) => {
           const {modId} = props ?? {};
 
-          return  endorseMod(modId,axiosOptions)
+          return  endorseMod(modId,requestOptions)
         }
 
         
@@ -68,10 +67,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type EndorseModMutationResult = NonNullable<Awaited<ReturnType<typeof endorseMod>>>
     
-    export type EndorseModMutationError = AxiosError<unknown>
+    export type EndorseModMutationError = ErrorType<unknown>
 
-    export const useEndorseMod = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof endorseMod>>, TError,{modId: number}, TContext>, axios?: AxiosRequestConfig}
+    export const useEndorseMod = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof endorseMod>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof endorseMod>>,
         TError,
@@ -84,27 +83,28 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     export const removeEndorsement = (
-    modId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<null>> => {
-    
-    
-    return axios.default.delete(
-      `http://localhost:8080/api/v1/mods/${modId}/endorsements`,options
-    );
-  }
+    modId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<null>(
+      {url: `http://localhost:8080/api/v1/mods/${modId}/endorsements`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
 
-
-export const getRemoveEndorsementMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeEndorsement>>, TError,{modId: number}, TContext>, axios?: AxiosRequestConfig}
+export const getRemoveEndorsementMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeEndorsement>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof removeEndorsement>>, TError,{modId: number}, TContext> => {
 
 const mutationKey = ['removeEndorsement'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -112,7 +112,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeEndorsement>>, {modId: number}> = (props) => {
           const {modId} = props ?? {};
 
-          return  removeEndorsement(modId,axiosOptions)
+          return  removeEndorsement(modId,requestOptions)
         }
 
         
@@ -122,10 +122,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type RemoveEndorsementMutationResult = NonNullable<Awaited<ReturnType<typeof removeEndorsement>>>
     
-    export type RemoveEndorsementMutationError = AxiosError<unknown>
+    export type RemoveEndorsementMutationError = ErrorType<unknown>
 
-    export const useRemoveEndorsement = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeEndorsement>>, TError,{modId: number}, TContext>, axios?: AxiosRequestConfig}
+    export const useRemoveEndorsement = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeEndorsement>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof removeEndorsement>>,
         TError,

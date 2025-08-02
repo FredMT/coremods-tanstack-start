@@ -34,13 +34,6 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseListModCommentResponse,
   ApiResponseModCommentResponse,
@@ -49,42 +42,48 @@ import type {
   ModCommentUpdateRequest
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType , BodyType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const updateComment = (
     commentId: number,
-    modCommentUpdateRequest: ModCommentUpdateRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseModCommentResponse>> => {
-    
-    
-    return axios.default.put(
-      `http://localhost:8080/api/v1/comments/mods/${commentId}`,
-      modCommentUpdateRequest,options
-    );
-  }
+    modCommentUpdateRequest: BodyType<ModCommentUpdateRequest>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseModCommentResponse>(
+      {url: `http://localhost:8080/api/v1/comments/mods/${commentId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: modCommentUpdateRequest
+    },
+      options);
+    }
+  
 
 
-
-export const getUpdateCommentMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateComment>>, TError,{commentId: number;data: ModCommentUpdateRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof updateComment>>, TError,{commentId: number;data: ModCommentUpdateRequest}, TContext> => {
+export const getUpdateCommentMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateComment>>, TError,{commentId: number;data: BodyType<ModCommentUpdateRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateComment>>, TError,{commentId: number;data: BodyType<ModCommentUpdateRequest>}, TContext> => {
 
 const mutationKey = ['updateComment'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateComment>>, {commentId: number;data: ModCommentUpdateRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateComment>>, {commentId: number;data: BodyType<ModCommentUpdateRequest>}> = (props) => {
           const {commentId,data} = props ?? {};
 
-          return  updateComment(commentId,data,axiosOptions)
+          return  updateComment(commentId,data,requestOptions)
         }
 
         
@@ -93,15 +92,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateCommentMutationResult = NonNullable<Awaited<ReturnType<typeof updateComment>>>
-    export type UpdateCommentMutationBody = ModCommentUpdateRequest
-    export type UpdateCommentMutationError = AxiosError<unknown>
+    export type UpdateCommentMutationBody = BodyType<ModCommentUpdateRequest>
+    export type UpdateCommentMutationError = ErrorType<unknown>
 
-    export const useUpdateComment = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateComment>>, TError,{commentId: number;data: ModCommentUpdateRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useUpdateComment = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateComment>>, TError,{commentId: number;data: BodyType<ModCommentUpdateRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateComment>>,
         TError,
-        {commentId: number;data: ModCommentUpdateRequest},
+        {commentId: number;data: BodyType<ModCommentUpdateRequest>},
         TContext
       > => {
 
@@ -110,27 +109,28 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     export const deleteComment = (
-    commentId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.delete(
-      `http://localhost:8080/api/v1/comments/mods/${commentId}`,options
-    );
-  }
+    commentId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/comments/mods/${commentId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
 
-
-export const getDeleteCommentMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteComment>>, TError,{commentId: number}, TContext>, axios?: AxiosRequestConfig}
+export const getDeleteCommentMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteComment>>, TError,{commentId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteComment>>, TError,{commentId: number}, TContext> => {
 
 const mutationKey = ['deleteComment'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -138,7 +138,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteComment>>, {commentId: number}> = (props) => {
           const {commentId} = props ?? {};
 
-          return  deleteComment(commentId,axiosOptions)
+          return  deleteComment(commentId,requestOptions)
         }
 
         
@@ -148,10 +148,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type DeleteCommentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteComment>>>
     
-    export type DeleteCommentMutationError = AxiosError<unknown>
+    export type DeleteCommentMutationError = ErrorType<unknown>
 
-    export const useDeleteComment = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteComment>>, TError,{commentId: number}, TContext>, axios?: AxiosRequestConfig}
+    export const useDeleteComment = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteComment>>, TError,{commentId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteComment>>,
         TError,
@@ -164,31 +164,33 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     export const getModComments = (
-    gameModId: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseListModCommentResponse>> => {
-    
-    
-    return axios.default.get(
-      `http://localhost:8080/api/v1/comments/mods/${gameModId}`,options
-    );
-  }
-
+    gameModId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseListModCommentResponse>(
+      {url: `http://localhost:8080/api/v1/comments/mods/${gameModId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetModCommentsQueryKey = (gameModId?: number,) => {
     return [`http://localhost:8080/api/v1/comments/mods/${gameModId}`] as const;
     }
 
     
-export const getGetModCommentsInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetModCommentsInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetModCommentsQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModComments>>> = ({ signal }) => getModComments(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModComments>>> = ({ signal }) => getModComments(gameModId, requestOptions, signal);
 
       
 
@@ -198,36 +200,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetModCommentsInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getModComments>>>
-export type GetModCommentsInfiniteQueryError = AxiosError<unknown>
+export type GetModCommentsInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(
+export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getModComments>>,
           TError,
           Awaited<ReturnType<typeof getModComments>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(
+export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getModComments>>,
           TError,
           Awaited<ReturnType<typeof getModComments>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -242,16 +244,16 @@ export function useGetModCommentsInfinite<TData = InfiniteData<Awaited<ReturnTyp
 
 
 
-export const getGetModCommentsQueryOptions = <TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetModCommentsQueryOptions = <TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetModCommentsQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModComments>>> = ({ signal }) => getModComments(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModComments>>> = ({ signal }) => getModComments(gameModId, requestOptions, signal);
 
       
 
@@ -261,36 +263,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetModCommentsQueryResult = NonNullable<Awaited<ReturnType<typeof getModComments>>>
-export type GetModCommentsQueryError = AxiosError<unknown>
+export type GetModCommentsQueryError = ErrorType<unknown>
 
 
-export function useGetModComments<TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(
+export function useGetModComments<TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(
  gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getModComments>>,
           TError,
           Awaited<ReturnType<typeof getModComments>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModComments<TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(
+export function useGetModComments<TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(
  gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getModComments>>,
           TError,
           Awaited<ReturnType<typeof getModComments>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModComments<TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModComments<TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetModComments<TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModComments<TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -305,16 +307,16 @@ export function useGetModComments<TData = Awaited<ReturnType<typeof getModCommen
 
 
 
-export const getGetModCommentsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetModCommentsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetModCommentsQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModComments>>> = ({ signal }) => getModComments(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModComments>>> = ({ signal }) => getModComments(gameModId, requestOptions, signal);
 
       
 
@@ -324,24 +326,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetModCommentsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getModComments>>>
-export type GetModCommentsSuspenseQueryError = AxiosError<unknown>
+export type GetModCommentsSuspenseQueryError = ErrorType<unknown>
 
 
-export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getModComments>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getModComments>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -356,16 +358,16 @@ export function useGetModCommentsSuspense<TData = Awaited<ReturnType<typeof getM
 
 
 
-export const getGetModCommentsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetModCommentsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetModCommentsQueryKey(gameModId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModComments>>> = ({ signal }) => getModComments(gameModId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModComments>>> = ({ signal }) => getModComments(gameModId, requestOptions, signal);
 
       
 
@@ -375,24 +377,24 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetModCommentsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getModComments>>>
-export type GetModCommentsSuspenseInfiniteQueryError = AxiosError<unknown>
+export type GetModCommentsSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = AxiosError<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModComments>>>, TError = ErrorType<unknown>>(
+ gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModComments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -409,36 +411,39 @@ export function useGetModCommentsSuspenseInfinite<TData = InfiniteData<Awaited<R
 
 export const createModComment = (
     gameModId: number,
-    modCommentRequest: ModCommentRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseModCommentResponse>> => {
-    
-    
-    return axios.default.post(
-      `http://localhost:8080/api/v1/comments/mods/${gameModId}`,
-      modCommentRequest,options
-    );
-  }
+    modCommentRequest: BodyType<ModCommentRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApiResponseModCommentResponse>(
+      {url: `http://localhost:8080/api/v1/comments/mods/${gameModId}`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: modCommentRequest, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getCreateModCommentMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createModComment>>, TError,{gameModId: number;data: ModCommentRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof createModComment>>, TError,{gameModId: number;data: ModCommentRequest}, TContext> => {
+export const getCreateModCommentMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createModComment>>, TError,{gameModId: number;data: BodyType<ModCommentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createModComment>>, TError,{gameModId: number;data: BodyType<ModCommentRequest>}, TContext> => {
 
 const mutationKey = ['createModComment'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createModComment>>, {gameModId: number;data: ModCommentRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createModComment>>, {gameModId: number;data: BodyType<ModCommentRequest>}> = (props) => {
           const {gameModId,data} = props ?? {};
 
-          return  createModComment(gameModId,data,axiosOptions)
+          return  createModComment(gameModId,data,requestOptions)
         }
 
         
@@ -447,15 +452,15 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateModCommentMutationResult = NonNullable<Awaited<ReturnType<typeof createModComment>>>
-    export type CreateModCommentMutationBody = ModCommentRequest
-    export type CreateModCommentMutationError = AxiosError<unknown>
+    export type CreateModCommentMutationBody = BodyType<ModCommentRequest>
+    export type CreateModCommentMutationError = ErrorType<unknown>
 
-    export const useCreateModComment = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createModComment>>, TError,{gameModId: number;data: ModCommentRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const useCreateModComment = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createModComment>>, TError,{gameModId: number;data: BodyType<ModCommentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createModComment>>,
         TError,
-        {gameModId: number;data: ModCommentRequest},
+        {gameModId: number;data: BodyType<ModCommentRequest>},
         TContext
       > => {
 

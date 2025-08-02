@@ -14,47 +14,44 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiResponseVoid,
   UpdateUserRoleParams
 } from '../endpoints.schemas';
 
+import { customInstance } from '.././mutator/custom-instance';
+import type { ErrorType } from '.././mutator/custom-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const updateUserRole = (
     userId: number,
-    params: UpdateUserRoleParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ApiResponseVoid>> => {
-    
-    
-    return axios.default.put(
-      `http://localhost:8080/api/v1/admin/users/${userId}/role`,undefined,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+    params: UpdateUserRoleParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ApiResponseVoid>(
+      {url: `http://localhost:8080/api/v1/admin/users/${userId}/role`, method: 'PUT',
+        params
+    },
+      options);
+    }
+  
 
 
-
-export const getUpdateUserRoleMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUserRole>>, TError,{userId: number;params: UpdateUserRoleParams}, TContext>, axios?: AxiosRequestConfig}
+export const getUpdateUserRoleMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUserRole>>, TError,{userId: number;params: UpdateUserRoleParams}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof updateUserRole>>, TError,{userId: number;params: UpdateUserRoleParams}, TContext> => {
 
 const mutationKey = ['updateUserRole'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -62,7 +59,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUserRole>>, {userId: number;params: UpdateUserRoleParams}> = (props) => {
           const {userId,params} = props ?? {};
 
-          return  updateUserRole(userId,params,axiosOptions)
+          return  updateUserRole(userId,params,requestOptions)
         }
 
         
@@ -72,10 +69,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type UpdateUserRoleMutationResult = NonNullable<Awaited<ReturnType<typeof updateUserRole>>>
     
-    export type UpdateUserRoleMutationError = AxiosError<unknown>
+    export type UpdateUserRoleMutationError = ErrorType<unknown>
 
-    export const useUpdateUserRole = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUserRole>>, TError,{userId: number;params: UpdateUserRoleParams}, TContext>, axios?: AxiosRequestConfig}
+    export const useUpdateUserRole = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUserRole>>, TError,{userId: number;params: UpdateUserRoleParams}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateUserRole>>,
         TError,

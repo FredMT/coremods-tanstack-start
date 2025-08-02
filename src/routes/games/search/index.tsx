@@ -1,9 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-    useSearchGames,
-    useSearchGamesSuspense,
-} from '@/lib/api/game-controller/game-controller'
+import { useSearchGamesSuspense } from '@/lib/api/game-controller/game-controller'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { useState } from 'react'
@@ -11,7 +8,7 @@ import z from 'zod'
 import { PendingComponent } from './-components/pendingComponent'
 
 const searchGamesSchema = z.object({
-    q: z.coerce.string().min(1, "Search query must not be empty").trim(),
+    q: z.string().min(1, 'Search query must not be empty').trim(),
 })
 
 export const Route = createFileRoute('/games/search/')({
@@ -33,7 +30,7 @@ function RouteComponent() {
             query: {
                 staleTime: 1_000 * 60 * 5,
                 gcTime: 1_000 * 60 * 5,
-                select: (response) => response.data.data,
+                select: (response) => response.data,
             },
         }
     )
