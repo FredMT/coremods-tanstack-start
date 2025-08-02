@@ -10,10 +10,10 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { toast } from '@/components/ui/sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useServerFn } from '@tanstack/react-start'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { loginServerFn } from '../-fn/loginServerFn'
 import { LoginFormData, LoginFormSchema } from '../-types/LoginFormSchema'
 export function Login({ className, ...props }: React.ComponentProps<'form'>) {
@@ -33,12 +33,11 @@ export function Login({ className, ...props }: React.ComponentProps<'form'>) {
             const formData = new FormData()
             formData.append('usernameOrEmail', data.usernameOrEmail)
             formData.append('password', data.password)
-            console.log(data.rememberMe)
             formData.append('rememberMe', data.rememberMe.toString())
 
             await loginFn({ data: formData })
         } catch (error) {
-            toast.error('Login failed. Please try again.')
+            toast.error(error.data.message)
         }
     }
 

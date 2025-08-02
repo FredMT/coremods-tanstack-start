@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VerifyEmailIndexRouteImport } from './routes/verify-email/index'
 import { Route as RegisterIndexRouteImport } from './routes/register/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as GamesSearchIndexRouteImport } from './routes/games/search/index'
@@ -17,6 +18,11 @@ import { Route as GamesSearchIndexRouteImport } from './routes/games/search/inde
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailIndexRoute = VerifyEmailIndexRouteImport.update({
+  id: '/verify-email/',
+  path: '/verify-email/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterIndexRoute = RegisterIndexRouteImport.update({
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginIndexRoute
   '/register': typeof RegisterIndexRoute
+  '/verify-email': typeof VerifyEmailIndexRoute
   '/games/search': typeof GamesSearchIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginIndexRoute
   '/register': typeof RegisterIndexRoute
+  '/verify-email': typeof VerifyEmailIndexRoute
   '/games/search': typeof GamesSearchIndexRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,28 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login/': typeof LoginIndexRoute
   '/register/': typeof RegisterIndexRoute
+  '/verify-email/': typeof VerifyEmailIndexRoute
   '/games/search/': typeof GamesSearchIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/games/search'
+  fullPaths: '/' | '/login' | '/register' | '/verify-email' | '/games/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/games/search'
-  id: '__root__' | '/' | '/login/' | '/register/' | '/games/search/'
+  to: '/' | '/login' | '/register' | '/verify-email' | '/games/search'
+  id:
+    | '__root__'
+    | '/'
+    | '/login/'
+    | '/register/'
+    | '/verify-email/'
+    | '/games/search/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
+  VerifyEmailIndexRoute: typeof VerifyEmailIndexRoute
   GamesSearchIndexRoute: typeof GamesSearchIndexRoute
 }
 
@@ -76,6 +92,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email/': {
+      id: '/verify-email/'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register/': {
@@ -106,6 +129,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   RegisterIndexRoute: RegisterIndexRoute,
+  VerifyEmailIndexRoute: VerifyEmailIndexRoute,
   GamesSearchIndexRoute: GamesSearchIndexRoute,
 }
 export const routeTree = rootRouteImport

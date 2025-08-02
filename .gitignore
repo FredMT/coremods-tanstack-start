@@ -4,3 +4,5 @@ node_modules
 .cursor
 orval.config.ts
 api-docs.yaml
+.output/
+.nitro/

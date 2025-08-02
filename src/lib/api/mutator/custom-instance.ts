@@ -4,7 +4,6 @@ export const AXIOS_INSTANCE = Axios.create({
     baseURL: 'http://localhost:8080',
 })
 
-// Function to get cookie value by name using document.cookie
 const getCookieValue = (name: string): string | undefined => {
     if (typeof document === 'undefined') return undefined
 
@@ -14,9 +13,7 @@ const getCookieValue = (name: string): string | undefined => {
     return match ? decodeURIComponent(match[3]) : undefined
 }
 
-// Add CSRF token to state-changing requests
 AXIOS_INSTANCE.interceptors.request.use((config) => {
-    // Only add CSRF token for state-changing methods
     if (
         config.method &&
         ['post', 'put', 'delete', 'patch'].includes(config.method.toLowerCase())
@@ -30,39 +27,103 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
     return config
 })
 
-// Handle 401 responses and process Set-Cookie headers that clear the SESSION cookie
 AXIOS_INSTANCE.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        const setCookieHeader = response.headers['set-cookie']
+        if (setCookieHeader && typeof document !== 'undefined') {
+            processCookieHeaders(setCookieHeader)
+        }
+        return response
+    },
     (error) => {
-        // Check if it's a 401 error
-        if (error.response && error.response.status === 401) {
-            // Check for Set-Cookie header that's trying to clear the SESSION cookie
-            const setCookieHeader = error.response.headers['set-cookie']
-            if (setCookieHeader && typeof document !== 'undefined') {
-                // If the header contains instructions to clear the SESSION cookie, do it on the client side
-                if (Array.isArray(setCookieHeader)) {
-                    setCookieHeader.forEach((cookieStr) => {
-                        if (
-                            cookieStr.includes('SESSION=') &&
-                            cookieStr.includes('Max-Age=0')
-                        ) {
-                            document.cookie =
-                                'SESSION=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure; HttpOnly'
-                        }
-                    })
-                } else if (
-                    typeof setCookieHeader === 'string' &&
-                    setCookieHeader.includes('SESSION=') &&
-                    setCookieHeader.includes('Max-Age=0')
-                ) {
-                    document.cookie =
-                        'SESSION=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure; HttpOnly'
+        if (
+            error.response?.status === 403 &&
+            error.response?.headers?.location
+        ) {
+            if (typeof window !== 'undefined') {
+                window.location.href = error.response.headers.location
+            }
+        }
+
+        const serializableError: any = {
+            message: error.message,
+            name: error.name,
+            code: error.code,
+        }
+
+        if (error.response) {
+            serializableError.status = error.response.status
+            serializableError.statusText = error.response.statusText
+            serializableError.data = error.response.data
+
+            serializableError.headers = {}
+            if (error.response.headers) {
+                const headers = error.response.headers
+                Object.keys(headers).forEach((key) => {
+                    if (typeof headers[key] === 'string') {
+                        serializableError.headers[key] = headers[key]
+                    }
+                })
+            }
+
+            if (error.response.headers?.location) {
+                serializableError.headers.location =
+                    error.response.headers.location
+            }
+        }
+
+        return Promise.reject(serializableError)
+    }
+)
+
+const processCookieHeaders = (setCookieHeader: string | string[]) => {
+    const cookieStrings = Array.isArray(setCookieHeader)
+        ? setCookieHeader
+        : [setCookieHeader]
+
+    cookieStrings.forEach((cookieStr) => {
+        if (cookieStr.includes('SESSION=')) {
+            if (
+                cookieStr.includes('Max-Age=0') ||
+                cookieStr.includes('Expires=Thu, 01 Jan 1970')
+            ) {
+                document.cookie =
+                    'SESSION=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure; HttpOnly'
+            } else {
+                const cookieParts = parseCookieString(cookieStr)
+                if (cookieParts.value) {
+                    document.cookie = cookieParts.cookieString
                 }
             }
         }
-        return Promise.reject(error)
+
+        if (cookieStr.includes('X-XSRF-TOKEN=')) {
+            if (
+                cookieStr.includes('Max-Age=0') ||
+                cookieStr.includes('Expires=Thu, 01 Jan 1970')
+            ) {
+                document.cookie =
+                    'X-XSRF-TOKEN=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict'
+            } else {
+                const cookieParts = parseCookieString(cookieStr)
+                if (cookieParts.value) {
+                    document.cookie = cookieParts.cookieString
+                }
+            }
+        }
+    })
+}
+
+const parseCookieString = (cookieStr: string) => {
+    const [nameValue, ...attributeParts] = cookieStr.split(';')
+    const [name, value] = nameValue.split('=')
+
+    return {
+        name: name.trim(),
+        value: value,
+        cookieString: cookieStr,
     }
-)
+}
 
 export const customInstance = <T>(
     config: AxiosRequestConfig,
@@ -73,7 +134,24 @@ export const customInstance = <T>(
         ...config,
         ...options,
         cancelToken: source.token,
-    }).then(({ data }) => data)
+    })
+        .then(({ data }) => data)
+        .catch((error) => {
+            const serializableError: any = {
+                message: error.message,
+                name: error.name,
+                code: error.code,
+            }
+
+            if (error.response) {
+                serializableError.status = error.response.status
+                serializableError.statusText = error.response.statusText
+                serializableError.data = error.response.data
+                serializableError.headers = error.response.headers
+            }
+
+            throw serializableError
+        })
 
     // @ts-ignore
     promise.cancel = () => {

@@ -20,6 +20,7 @@ import appCss from '@/styles/app.css?url'
 import { ResAuthUser } from '@/types/ResAuthUser'
 import { wrapCreateRootRouteWithSentry } from '@sentry/tanstackstart-react'
 import type { QueryClient } from '@tanstack/react-query'
+import { Toaster } from 'sonner'
 
 export const Route = wrapCreateRootRouteWithSentry(createRootRouteWithContext)<{
     queryClient: QueryClient
@@ -88,6 +89,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
                 <Footer />
                 <TanStackRouterDevtools position="bottom-right" />
                 <ReactQueryDevtools buttonPosition="bottom-left" />
+                <Toaster />
                 <Scripts />
             </body>
         </html>
