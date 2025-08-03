@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useSearchGamesSuspense } from '@/lib/api/game-controller/game-controller'
+import { PendingComponent } from '@/routes/games/search/-components/pendingComponent'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { useState } from 'react'
 import z from 'zod'
-import { PendingComponent } from './-components/pendingComponent'
 
 const searchGamesSchema = z.object({
     q: z.string().min(1, 'Search query must not be empty').trim(),

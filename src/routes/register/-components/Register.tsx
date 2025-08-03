@@ -1,22 +1,25 @@
+import PasswordStrengthInput from '@/components/meta-ui/PasswordStrengthInput'
+import { RequiredFormLabel } from '@/components/meta-ui/RequiredFormLabel'
 import { Button } from '@/components/ui/button'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { toast } from '@/components/ui/sonner'
 import { registerServerFn } from '@/routes/register/-fn/registerServerFn'
-import { RegisterFormData, RegisterFormSchema } from '@/routes/register/-types/RegisterFormSchema'
+import {
+    RegisterFormData,
+    RegisterFormSchema,
+} from '@/routes/register/-types/RegisterFormSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useServerFn } from '@tanstack/react-start'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
-export function Register({ className, ...props }: React.ComponentProps<'form'>) {
+export function Register() {
     const form = useForm<RegisterFormData>({
         resolver: zodResolver(RegisterFormSchema),
         defaultValues: {
@@ -39,7 +42,24 @@ export function Register({ className, ...props }: React.ComponentProps<'form'>) 
 
             await registerFn({ data: formData })
         } catch (error) {
-            toast.error('Login failed. Please try again.')
+            if (error.name === 'ZodError' && error.issues) {
+                error.issues.forEach((issue: any) => {
+                    const fieldName = issue.path[0]
+                    form.setError(fieldName as any, {
+                        message: issue.message,
+                    })
+                })
+            } else if (error.name === 'AxiosError' && error.data) {
+                Object.entries(error.data).forEach(
+                    ([fieldName, errorMessage]) => {
+                        form.setError(fieldName as any, {
+                            message: errorMessage as string,
+                        })
+                    }
+                )
+            } else {
+                toast.error(error.message)
+            }
         }
     }
 
@@ -55,7 +75,7 @@ export function Register({ className, ...props }: React.ComponentProps<'form'>) 
                         name="username"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Username</FormLabel>
+                                <RequiredFormLabel>Username</RequiredFormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Enter your username"
@@ -67,12 +87,12 @@ export function Register({ className, ...props }: React.ComponentProps<'form'>) 
                         )}
                     />
 
-<FormField
+                    <FormField
                         control={form.control}
                         name="email"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Email</FormLabel>
+                                <RequiredFormLabel>Email</RequiredFormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Enter your email"
@@ -89,12 +109,12 @@ export function Register({ className, ...props }: React.ComponentProps<'form'>) 
                         name="password"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Password</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        type="password"
+                                    <PasswordStrengthInput
+                                        value={field.value}
+                                        onChange={field.onChange}
                                         placeholder="Enter your password"
-                                        {...field}
+                                        label="Password"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -106,7 +126,12 @@ export function Register({ className, ...props }: React.ComponentProps<'form'>) 
                         control={form.control}
                         name="confirmPassword"
                         render={({ field }) => (
-                            <FormItem className="flex flex-row items-center space-y-0 space-x-2">
+                            <FormItem className="flex flex-col space-y-0 space-x-2">
+                                <div className="flex flex-col gap-y-1">
+                                    <RequiredFormLabel>
+                                        Confirm Password
+                                    </RequiredFormLabel>
+                                </div>
                                 <FormControl>
                                     <Input
                                         type="password"
@@ -114,18 +139,17 @@ export function Register({ className, ...props }: React.ComponentProps<'form'>) 
                                         {...field}
                                     />
                                 </FormControl>
-                                <div className="flex flex-col gap-y-1">
-                                    <FormLabel>Confirm Password</FormLabel>
-                                    <FormDescription>
-                                        Confirm your password
-                                    </FormDescription>
-                                </div>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
 
-                    <Button type="submit" className="w-full">
-                        Login
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={!form.formState.isValid}
+                    >
+                        Register
                     </Button>
                 </form>
             </Form>

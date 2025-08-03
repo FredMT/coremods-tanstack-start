@@ -1,9 +1,14 @@
 import { Separator } from '@/components/ui/separator'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Login } from '../login/-components/Login'
+import { Register } from '@/routes/register/-components/Register'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/register/')({
     component: RegisterPage,
+    beforeLoad: async ({ context }) => {
+        if (context.user) {
+            throw redirect({ to: '/' })
+        }
+    },
 })
 
 function RegisterPage() {
@@ -21,8 +26,8 @@ function RegisterPage() {
                     Register for ModSanctuary
                 </p>
                 <div className="flex flex-col items-center justify-center">
-                    <div className="w-full max-w-xs">
-                        <Login />
+                    <div className="w-full max-w-sm">
+                        <Register />
                     </div>
                     <Separator className="mb-8" />
                     <p className="text-muted-foreground text-sm">

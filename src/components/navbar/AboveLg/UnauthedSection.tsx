@@ -1,6 +1,6 @@
-import { LinkButton } from '../meta-ui/LinkButton'
+import { LinkButton } from '@/components/meta-ui/LinkButton'
 
-export function AuthAboveLg({
+export function UnauthedSection({
     isLoginPage,
     isRegisterPage,
 }: {

@@ -11,6 +11,8 @@ import type { ReactNode } from 'react'
 
 import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
 import { Footer } from '@/components/Footer'
+
+import { SonnerToaster } from '@/components/meta-ui/SonnerToaster'
 import { Navigation } from '@/components/navbar/Navigation'
 import { NotFound } from '@/components/NotFound'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -20,7 +22,6 @@ import appCss from '@/styles/app.css?url'
 import { ResAuthUser } from '@/types/ResAuthUser'
 import { wrapCreateRootRouteWithSentry } from '@sentry/tanstackstart-react'
 import type { QueryClient } from '@tanstack/react-query'
-import { Toaster } from 'sonner'
 
 export const Route = wrapCreateRootRouteWithSentry(createRootRouteWithContext)<{
     queryClient: QueryClient
@@ -76,20 +77,18 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-    const context = Route.useRouteContext()
-    const user = context.user as ResAuthUser | null
     return (
         <html suppressHydrationWarning>
             <head>
                 <HeadContent />
             </head>
             <body className="flex min-h-dvh flex-col">
-                <Navigation user={user} />
+                <Navigation />
                 <main className="flex-1">{children}</main>
                 <Footer />
                 <TanStackRouterDevtools position="bottom-right" />
                 <ReactQueryDevtools buttonPosition="bottom-left" />
-                <Toaster />
+                <SonnerToaster />
                 <Scripts />
             </body>
         </html>

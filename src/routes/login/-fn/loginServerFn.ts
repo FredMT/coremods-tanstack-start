@@ -66,6 +66,8 @@ export const loginServerFn = createServerFn({ method: 'POST' })
                     to: '/verify-email',
                 })
             }
+
+            console.log('Error:', error)
             throw error
         }
     })

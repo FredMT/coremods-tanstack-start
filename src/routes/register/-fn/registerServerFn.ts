@@ -1,7 +1,7 @@
+import { customInstance } from '@/lib/api/mutator/custom-instance'
 import { RegisterFormSchema } from '@/routes/register/-types/RegisterFormSchema'
 import { redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import { getCookie } from '@tanstack/react-start/server'
 
 export const registerServerFn = createServerFn({ method: 'POST' })
     .validator((data) => {
@@ -25,29 +25,23 @@ export const registerServerFn = createServerFn({ method: 'POST' })
     })
     .handler(
         async ({ data: { username, email, password, confirmPassword } }) => {
-            const csrfCookie = getCookie('X-XSRF-TOKEN')
-            if (!csrfCookie) {
-                throw new Error('X-XSRF-TOKEN is not set')
-            }
-            const res = await fetch('http://localhost:8080/api/auth/register', {
-                method: 'POST',
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password,
-                    confirmPassword,
-                }),
-                headers: {
-                    'X-XSRF-TOKEN': csrfCookie,
-                },
-            })
+            try {
+                await customInstance({
+                    url: '/api/auth/register',
+                    method: 'POST',
+                    data: {
+                        username,
+                        email,
+                        password,
+                        confirmPassword,
+                    },
+                })
 
-            if (!res.ok) {
-                throw new Error('Failed to login')
+                throw redirect({
+                    to: '/',
+                })
+            } catch (error) {
+                throw error
             }
-
-            throw redirect({
-                to: '/',
-            })
         }
     )

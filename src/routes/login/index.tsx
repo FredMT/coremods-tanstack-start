@@ -1,9 +1,14 @@
 import { Separator } from '@/components/ui/separator'
 import { Login } from '@/routes/login/-components/Login'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/login/')({
     component: LoginPage,
+    beforeLoad: async ({ context }) => {
+        if (context.user) {
+            throw redirect({ to: '/' })
+        }
+    },
 })
 
 export function LoginPage() {

@@ -1,5 +1,6 @@
 import { NavbarHeader } from '@/components/navbar/NavbarHeader'
 import { SheetItem } from '@/components/navbar/SheetItem'
+import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { MenuIcon } from 'lucide-react'
 
@@ -10,8 +11,14 @@ export function NavbarHamburgerMenuSheet({
 }) {
     return (
         <Sheet>
-            <SheetTrigger>
-                <MenuIcon className="size-6" />
+            <SheetTrigger asChild>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-muted cursor-pointer"
+                >
+                    <MenuIcon className="size-6" />
+                </Button>
             </SheetTrigger>
             <SheetContent
                 side="left"

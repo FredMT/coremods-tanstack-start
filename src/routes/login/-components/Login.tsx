@@ -1,3 +1,5 @@
+import { RequiredFormLabel } from '@/components/meta-ui/RequiredFormLabel'
+import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -10,13 +12,16 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { toast } from '@/components/ui/sonner'
+import { loginServerFn } from '@/routes/login/-fn/loginServerFn'
+import {
+    LoginFormData,
+    LoginFormSchema,
+} from '@/routes/login/-types/LoginFormSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useServerFn } from '@tanstack/react-start'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { loginServerFn } from '../-fn/loginServerFn'
-import { LoginFormData, LoginFormSchema } from '../-types/LoginFormSchema'
-export function Login({ className, ...props }: React.ComponentProps<'form'>) {
+export function Login() {
     const form = useForm<LoginFormData>({
         resolver: zodResolver(LoginFormSchema),
         defaultValues: {
@@ -25,6 +30,8 @@ export function Login({ className, ...props }: React.ComponentProps<'form'>) {
             rememberMe: false,
         },
     })
+
+    const [alert, setAlert] = useState<string | null>(null)
 
     const loginFn = useServerFn(loginServerFn)
 
@@ -37,7 +44,28 @@ export function Login({ className, ...props }: React.ComponentProps<'form'>) {
 
             await loginFn({ data: formData })
         } catch (error) {
-            toast.error(error.data.message)
+            if (error.name === 'ZodError' && error.issues) {
+                error.issues.forEach((issue: any) => {
+                    const fieldName = issue.path[0]
+                    form.setError(fieldName as any, {
+                        message: issue.message,
+                    })
+                })
+            }
+
+            if (error.name === 'AxiosError' && error.data) {
+                if (error.data.message === 'Bad credentials') {
+                    setAlert('Invalid credentials')
+                } else {
+                    Object.entries(error.data).forEach(
+                        ([fieldName, errorMessage]) => {
+                            form.setError(fieldName as any, {
+                                message: errorMessage as string,
+                            })
+                        }
+                    )
+                }
+            }
         }
     }
 
@@ -53,7 +81,9 @@ export function Login({ className, ...props }: React.ComponentProps<'form'>) {
                         name="usernameOrEmail"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Username or Email</FormLabel>
+                                <RequiredFormLabel>
+                                    Username or Email
+                                </RequiredFormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Enter your username or email"
@@ -70,7 +100,7 @@ export function Login({ className, ...props }: React.ComponentProps<'form'>) {
                         name="password"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Password</FormLabel>
+                                <RequiredFormLabel>Password</RequiredFormLabel>
                                 <FormControl>
                                     <Input
                                         type="password"
@@ -104,9 +134,18 @@ export function Login({ className, ...props }: React.ComponentProps<'form'>) {
                         )}
                     />
 
-                    <Button type="submit" className="w-full">
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={!form.formState.isValid}
+                    >
                         Login
                     </Button>
+                    {alert && (
+                        <Alert variant="destructive">
+                            <AlertTitle>{alert}</AlertTitle>
+                        </Alert>
+                    )}
                 </form>
             </Form>
         </div>

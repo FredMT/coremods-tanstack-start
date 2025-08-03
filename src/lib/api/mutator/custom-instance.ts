@@ -141,9 +141,13 @@ export const customInstance = <T>(
         .then(({ data }) => data)
         .catch((error) => {
             const serializableError: SerializableError = {
-                message: error.message,
+                message: error.data.message || error.message,
                 name: error.name,
                 code: error.code,
+                ...error.data,
+                headers: error.headers,
+                status: error.status,
+                statusText: error.statusText,
             }
 
             if (error.response) {
