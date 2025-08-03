@@ -14,8 +14,8 @@ export function AuthedSection() {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <div className="hover:bg-muted hidden h-full cursor-pointer items-center justify-center gap-x-1 px-3 pr-3 pl-2 select-none lg:flex lg:pl-3">
-                        <div className="flex items-center gap-x-2">
+                    <div className="hover:bg-muted flex cursor-pointer items-center justify-center gap-x-1 px-3 pr-3 pl-2 select-none lg:pl-3">
+                        <div className="flex h-full items-center gap-x-2">
                             <Avatar>
                                 <AvatarImage src="https://github.com/shadcn.png" />
                                 <AvatarFallback>CN</AvatarFallback>

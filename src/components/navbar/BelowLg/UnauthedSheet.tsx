@@ -8,6 +8,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet'
+import { Link } from '@tanstack/react-router'
 
 import { User2, XIcon } from 'lucide-react'
 
@@ -33,7 +34,11 @@ export function UnauthedSheet({
                 <SheetDescription hidden>Login or Register</SheetDescription>
                 <div className="flex min-h-18 items-center justify-between gap-x-4 border-b pr-3 pl-6">
                     <div className="flex w-full items-center justify-between gap-x-2">
-                        <div className="flex items-center">MS</div>
+                        <SheetClose asChild>
+                            <Link to="/">
+                                <div className="flex items-center py-4">MS</div>
+                            </Link>
+                        </SheetClose>
                         <SheetClose asChild>
                             <Button
                                 variant="ghost"

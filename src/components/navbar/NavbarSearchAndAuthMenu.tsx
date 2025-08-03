@@ -16,10 +16,12 @@ export function NavbarSearchAndAuthMenu() {
                     isRegisterPage={isRegisterPage}
                 />
             </div>
-            <AuthAboveLg
-                isLoginPage={isLoginPage}
-                isRegisterPage={isRegisterPage}
-            />
+            <div className="hidden h-full items-center lg:flex">
+                <AuthAboveLg
+                    isLoginPage={isLoginPage}
+                    isRegisterPage={isRegisterPage}
+                />
+            </div>
         </div>
     )
 }
