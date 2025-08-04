@@ -18,6 +18,7 @@ export function AuthedSheet() {
     const context = useRouteContext({ from: '__root__' })
     const user = context.user
     const authedItems = navbarAuthedItems
+    const r2Endpoint = import.meta.env.VITE_R2_PUBLIC_DEV_ENDPOINT;
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -37,8 +38,8 @@ export function AuthedSheet() {
                 <div className="flex min-h-18 items-center justify-between gap-x-4 border-b pr-3 pl-6">
                     <div className="flex items-center gap-x-2">
                         <Avatar>
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>CN</AvatarFallback>
+                            <AvatarImage src={`${r2Endpoint}/${user?.image}`} />
+                            <AvatarFallback>{user?.username.substr(0, 2).toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <p className="font-semibold">{user?.username}</p>
                     </div>

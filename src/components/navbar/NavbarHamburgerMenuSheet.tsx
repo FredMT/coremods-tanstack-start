@@ -1,7 +1,13 @@
 import { NavbarHeader } from '@/components/navbar/NavbarHeader'
 import { SheetItem } from '@/components/navbar/SheetItem'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetTitle,
+    SheetTrigger,
+} from '@/components/ui/sheet'
 import { MenuIcon } from 'lucide-react'
 
 export function NavbarHamburgerMenuSheet({
@@ -20,6 +26,10 @@ export function NavbarHamburgerMenuSheet({
                     <MenuIcon className="size-6" />
                 </Button>
             </SheetTrigger>
+            <SheetTitle hidden>ModSanctuary Hamburger Menu</SheetTitle>
+            <SheetDescription hidden>
+                ModSanctuary Hamburger Menu
+            </SheetDescription>
             <SheetContent
                 side="left"
                 className="bg-hamburger w-full gap-0 md:w-1/2"
