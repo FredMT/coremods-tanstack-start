@@ -4,411 +4,507 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseInfiniteQueryResult,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
+    DataTag,
+    DefinedInitialDataOptions,
+    DefinedUseQueryResult,
+    MutationFunction,
+    QueryClient,
+    QueryFunction,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    UseMutationOptions,
+    UseMutationResult,
+    UseQueryOptions,
+    UseQueryResult,
+    UseSuspenseQueryOptions,
+    UseSuspenseQueryResult,
+} from '@tanstack/react-query'
 
 import type {
-  ApiResponseModPermissions,
-  ApiResponseVoid,
-  CreateOrUpdateModPermissionsRequest
-} from '../endpoints.schemas';
+    ApiResponseModPermissions,
+    ApiResponseVoid,
+    CreateOrUpdateModPermissionsRequest,
+} from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType , BodyType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType, BodyType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const getLatestModPermissions = (
     modId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseModPermissions>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/permissions`, method: 'GET', signal
-    },
-      options);
+    return customInstance<ApiResponseModPermissions>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/permissions`,
+            method: 'GET',
+            signal,
+        },
+        options
+    )
+}
+
+export const getGetLatestModPermissionsQueryKey = (modId?: number) => {
+    return [`http://localhost:8080/api/v1/mods/${modId}/permissions`] as const
+}
+
+export const getGetLatestModPermissionsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
     }
-  
-
-export const getGetLatestModPermissionsQueryKey = (modId?: number,) => {
-    return [`http://localhost:8080/api/v1/mods/${modId}/permissions`] as const;
-    }
-
-    
-export const getGetLatestModPermissionsInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey =
+        queryOptions?.queryKey ?? getGetLatestModPermissionsQueryKey(modId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetLatestModPermissionsQueryKey(modId);
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getLatestModPermissions>>
+    > = ({ signal }) => getLatestModPermissions(modId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLatestModPermissions>>> = ({ signal }) => getLatestModPermissions(modId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(modId), ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!modId,
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getLatestModPermissions>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetLatestModPermissionsInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getLatestModPermissions>>>
-export type GetLatestModPermissionsInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetLatestModPermissionsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(
- modId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getLatestModPermissions>>,
-          TError,
-          Awaited<ReturnType<typeof getLatestModPermissions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetLatestModPermissionsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getLatestModPermissions>>,
-          TError,
-          Awaited<ReturnType<typeof getLatestModPermissions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetLatestModPermissionsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetLatestModPermissionsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetLatestModPermissionsInfiniteQueryOptions(modId,options)
-
-  const query = useInfiniteQuery(queryOptions , queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetLatestModPermissionsQueryOptions = <TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetLatestModPermissionsQueryKey(modId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLatestModPermissions>>> = ({ signal }) => getLatestModPermissions(modId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(modId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetLatestModPermissionsQueryResult = NonNullable<Awaited<ReturnType<typeof getLatestModPermissions>>>
+export type GetLatestModPermissionsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getLatestModPermissions>>
+>
 export type GetLatestModPermissionsQueryError = ErrorType<unknown>
 
-
-export function useGetLatestModPermissions<TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(
- modId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getLatestModPermissions>>,
-          TError,
-          Awaited<ReturnType<typeof getLatestModPermissions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetLatestModPermissions<TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getLatestModPermissions>>,
-          TError,
-          Awaited<ReturnType<typeof getLatestModPermissions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetLatestModPermissions<TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetLatestModPermissions<TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetLatestModPermissionsQueryOptions(modId,options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export function useGetLatestModPermissions<
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getLatestModPermissions>>,
+                    TError,
+                    Awaited<ReturnType<typeof getLatestModPermissions>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetLatestModPermissions<
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getLatestModPermissions>>,
+                    TError,
+                    Awaited<ReturnType<typeof getLatestModPermissions>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetLatestModPermissions<
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useGetLatestModPermissions<
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetLatestModPermissionsQueryOptions(modId, options)
 
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export const getGetLatestModPermissionsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export const getGetLatestModPermissionsSuspenseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    }
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey =
+        queryOptions?.queryKey ?? getGetLatestModPermissionsQueryKey(modId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetLatestModPermissionsQueryKey(modId);
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getLatestModPermissions>>
+    > = ({ signal }) => getLatestModPermissions(modId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLatestModPermissions>>> = ({ signal }) => getLatestModPermissions(modId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getLatestModPermissions>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetLatestModPermissionsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getLatestModPermissions>>>
+export type GetLatestModPermissionsSuspenseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getLatestModPermissions>>
+>
 export type GetLatestModPermissionsSuspenseQueryError = ErrorType<unknown>
 
-
-export function useGetLatestModPermissionsSuspense<TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(
- modId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetLatestModPermissionsSuspense<TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetLatestModPermissionsSuspense<TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetLatestModPermissionsSuspense<TData = Awaited<ReturnType<typeof getLatestModPermissions>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetLatestModPermissionsSuspenseQueryOptions(modId,options)
-
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export function useGetLatestModPermissionsSuspense<
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options: {
+        query: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetLatestModPermissionsSuspense<
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetLatestModPermissionsSuspense<
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useGetLatestModPermissionsSuspense<
+    TData = Awaited<ReturnType<typeof getLatestModPermissions>>,
+    TError = ErrorType<unknown>,
+>(
+    modId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getLatestModPermissions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetLatestModPermissionsSuspenseQueryOptions(
+        modId,
+        options
+    )
 
+    const query = useSuspenseQuery(
+        queryOptions,
+        queryClient
+    ) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-export const getGetLatestModPermissionsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+    query.queryKey = queryOptions.queryKey
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetLatestModPermissionsQueryKey(modId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLatestModPermissions>>> = ({ signal }) => getLatestModPermissions(modId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return query
 }
-
-export type GetLatestModPermissionsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getLatestModPermissions>>>
-export type GetLatestModPermissionsSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetLatestModPermissionsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(
- modId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetLatestModPermissionsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetLatestModPermissionsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetLatestModPermissionsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getLatestModPermissions>>>, TError = ErrorType<unknown>>(
- modId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getLatestModPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetLatestModPermissionsSuspenseInfiniteQueryOptions(modId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
 
 export const updateModPermissions = (
     modId: number,
     createOrUpdateModPermissionsRequest: BodyType<CreateOrUpdateModPermissionsRequest>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/permissions`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: createOrUpdateModPermissionsRequest
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/permissions`,
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            data: createOrUpdateModPermissionsRequest,
+        },
+        options
+    )
+}
 
-
-export const getUpdateModPermissionsMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateModPermissions>>, TError,{modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateModPermissions>>, TError,{modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>}, TContext> => {
-
-const mutationKey = ['updateModPermissions'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateModPermissions>>, {modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>}> = (props) => {
-          const {modId,data} = props ?? {};
-
-          return  updateModPermissions(modId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateModPermissionsMutationResult = NonNullable<Awaited<ReturnType<typeof updateModPermissions>>>
-    export type UpdateModPermissionsMutationBody = BodyType<CreateOrUpdateModPermissionsRequest>
-    export type UpdateModPermissionsMutationError = ErrorType<unknown>
-
-    export const useUpdateModPermissions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateModPermissions>>, TError,{modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUpdateModPermissionsMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof updateModPermissions>>,
         TError,
-        {modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>},
+        { modId: number; data: BodyType<CreateOrUpdateModPermissionsRequest> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof updateModPermissions>>,
+    TError,
+    { modId: number; data: BodyType<CreateOrUpdateModPermissionsRequest> },
+    TContext
+> => {
+    const mutationKey = ['updateModPermissions']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUpdateModPermissionsMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof updateModPermissions>>,
+        { modId: number; data: BodyType<CreateOrUpdateModPermissionsRequest> }
+    > = (props) => {
+        const { modId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return updateModPermissions(modId, data, requestOptions)
     }
-    export const createModPermissions = (
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UpdateModPermissionsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof updateModPermissions>>
+>
+export type UpdateModPermissionsMutationBody =
+    BodyType<CreateOrUpdateModPermissionsRequest>
+export type UpdateModPermissionsMutationError = ErrorType<unknown>
+
+export const useUpdateModPermissions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof updateModPermissions>>,
+            TError,
+            {
+                modId: number
+                data: BodyType<CreateOrUpdateModPermissionsRequest>
+            },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof updateModPermissions>>,
+    TError,
+    { modId: number; data: BodyType<CreateOrUpdateModPermissionsRequest> },
+    TContext
+> => {
+    const mutationOptions = getUpdateModPermissionsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+export const createModPermissions = (
     modId: number,
     createOrUpdateModPermissionsRequest: BodyType<CreateOrUpdateModPermissionsRequest>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/permissions`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createOrUpdateModPermissionsRequest, signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/permissions`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: createOrUpdateModPermissionsRequest,
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getCreateModPermissionsMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createModPermissions>>, TError,{modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createModPermissions>>, TError,{modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>}, TContext> => {
-
-const mutationKey = ['createModPermissions'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createModPermissions>>, {modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>}> = (props) => {
-          const {modId,data} = props ?? {};
-
-          return  createModPermissions(modId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateModPermissionsMutationResult = NonNullable<Awaited<ReturnType<typeof createModPermissions>>>
-    export type CreateModPermissionsMutationBody = BodyType<CreateOrUpdateModPermissionsRequest>
-    export type CreateModPermissionsMutationError = ErrorType<unknown>
-
-    export const useCreateModPermissions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createModPermissions>>, TError,{modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getCreateModPermissionsMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof createModPermissions>>,
         TError,
-        {modId: number;data: BodyType<CreateOrUpdateModPermissionsRequest>},
+        { modId: number; data: BodyType<CreateOrUpdateModPermissionsRequest> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof createModPermissions>>,
+    TError,
+    { modId: number; data: BodyType<CreateOrUpdateModPermissionsRequest> },
+    TContext
+> => {
+    const mutationKey = ['createModPermissions']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getCreateModPermissionsMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof createModPermissions>>,
+        { modId: number; data: BodyType<CreateOrUpdateModPermissionsRequest> }
+    > = (props) => {
+        const { modId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return createModPermissions(modId, data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CreateModPermissionsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof createModPermissions>>
+>
+export type CreateModPermissionsMutationBody =
+    BodyType<CreateOrUpdateModPermissionsRequest>
+export type CreateModPermissionsMutationError = ErrorType<unknown>
+
+export const useCreateModPermissions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof createModPermissions>>,
+            TError,
+            {
+                modId: number
+                data: BodyType<CreateOrUpdateModPermissionsRequest>
+            },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof createModPermissions>>,
+    TError,
+    { modId: number; data: BodyType<CreateOrUpdateModPermissionsRequest> },
+    TContext
+> => {
+    const mutationOptions = getCreateModPermissionsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

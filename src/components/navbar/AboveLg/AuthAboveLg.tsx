@@ -1,6 +1,6 @@
 import { AuthedSection } from '@/components/navbar/AboveLg/AuthedSection'
 import { UnauthedSection } from '@/components/navbar/AboveLg/UnauthedSection'
-import { useRouteContext } from '@tanstack/react-router'
+import { useUser } from '@/lib/react-query-auth/config'
 
 export function AuthAboveLg({
     isLoginPage,
@@ -9,17 +9,21 @@ export function AuthAboveLg({
     isLoginPage: boolean
     isRegisterPage: boolean
 }) {
-    const context = useRouteContext({ from: '__root__' })
-    const user = context.user
+    const user = useUser({
+        retry: false,
+    })
+
+    if (user.isLoading) return <div>Loading...</div>
+
     return (
         <>
-            {!user && (
+            {!user.data && (
                 <UnauthedSection
                     isLoginPage={isLoginPage}
                     isRegisterPage={isRegisterPage}
                 />
             )}
-            {user && <AuthedSection />}
+            {user.data && <AuthedSection user={user.data} />}
         </>
     )
 }

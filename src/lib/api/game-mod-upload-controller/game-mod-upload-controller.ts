@@ -4,201 +4,275 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 import type {
-  MutationFunction,
-  QueryClient,
-  UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+    MutationFunction,
+    QueryClient,
+    UseMutationOptions,
+    UseMutationResult,
+} from '@tanstack/react-query'
 
 import type {
-  ApiResponseVoid,
-  ModDetailsRequest,
-  ModRequirementsMirrorsRequest
-} from '../endpoints.schemas';
+    ApiResponseVoid,
+    ModDetailsRequest,
+    ModRequirementsMirrorsRequest,
+} from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType , BodyType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType, BodyType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const saveModRequirementsMirrors = (
     modId: number,
     modRequirementsMirrorsRequest: BodyType<ModRequirementsMirrorsRequest>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/upload/requirements-mirrors`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: modRequirementsMirrorsRequest, signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/upload/requirements-mirrors`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: modRequirementsMirrorsRequest,
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getSaveModRequirementsMirrorsMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: BodyType<ModRequirementsMirrorsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: BodyType<ModRequirementsMirrorsRequest>}, TContext> => {
-
-const mutationKey = ['saveModRequirementsMirrors'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, {modId: number;data: BodyType<ModRequirementsMirrorsRequest>}> = (props) => {
-          const {modId,data} = props ?? {};
-
-          return  saveModRequirementsMirrors(modId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SaveModRequirementsMirrorsMutationResult = NonNullable<Awaited<ReturnType<typeof saveModRequirementsMirrors>>>
-    export type SaveModRequirementsMirrorsMutationBody = BodyType<ModRequirementsMirrorsRequest>
-    export type SaveModRequirementsMirrorsMutationError = ErrorType<unknown>
-
-    export const useSaveModRequirementsMirrors = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModRequirementsMirrors>>, TError,{modId: number;data: BodyType<ModRequirementsMirrorsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getSaveModRequirementsMirrorsMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof saveModRequirementsMirrors>>,
         TError,
-        {modId: number;data: BodyType<ModRequirementsMirrorsRequest>},
+        { modId: number; data: BodyType<ModRequirementsMirrorsRequest> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof saveModRequirementsMirrors>>,
+    TError,
+    { modId: number; data: BodyType<ModRequirementsMirrorsRequest> },
+    TContext
+> => {
+    const mutationKey = ['saveModRequirementsMirrors']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getSaveModRequirementsMirrorsMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof saveModRequirementsMirrors>>,
+        { modId: number; data: BodyType<ModRequirementsMirrorsRequest> }
+    > = (props) => {
+        const { modId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return saveModRequirementsMirrors(modId, data, requestOptions)
     }
-    export const publishMod = (
-    modId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/publish`, method: 'POST', signal
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type SaveModRequirementsMirrorsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof saveModRequirementsMirrors>>
+>
+export type SaveModRequirementsMirrorsMutationBody =
+    BodyType<ModRequirementsMirrorsRequest>
+export type SaveModRequirementsMirrorsMutationError = ErrorType<unknown>
+
+export const useSaveModRequirementsMirrors = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof saveModRequirementsMirrors>>,
+            TError,
+            { modId: number; data: BodyType<ModRequirementsMirrorsRequest> },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof saveModRequirementsMirrors>>,
+    TError,
+    { modId: number; data: BodyType<ModRequirementsMirrorsRequest> },
+    TContext
+> => {
+    const mutationOptions =
+        getSaveModRequirementsMirrorsMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const publishMod = (
+    modId: number,
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/publish`,
+            method: 'POST',
+            signal,
+        },
+        options
+    )
+}
 
-export const getPublishModMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishMod>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof publishMod>>, TError,{modId: number}, TContext> => {
-
-const mutationKey = ['publishMod'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof publishMod>>, {modId: number}> = (props) => {
-          const {modId} = props ?? {};
-
-          return  publishMod(modId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PublishModMutationResult = NonNullable<Awaited<ReturnType<typeof publishMod>>>
-    
-    export type PublishModMutationError = ErrorType<unknown>
-
-    export const usePublishMod = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishMod>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPublishModMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof publishMod>>,
         TError,
-        {modId: number},
+        { modId: number },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof publishMod>>,
+    TError,
+    { modId: number },
+    TContext
+> => {
+    const mutationKey = ['publishMod']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPublishModMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof publishMod>>,
+        { modId: number }
+    > = (props) => {
+        const { modId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return publishMod(modId, requestOptions)
     }
-    export const saveModDetails = (
-    modDetailsRequest: BodyType<ModDetailsRequest>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/upload/details`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: modDetailsRequest, signal
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PublishModMutationResult = NonNullable<
+    Awaited<ReturnType<typeof publishMod>>
+>
+
+export type PublishModMutationError = ErrorType<unknown>
+
+export const usePublishMod = <TError = ErrorType<unknown>, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof publishMod>>,
+            TError,
+            { modId: number },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof publishMod>>,
+    TError,
+    { modId: number },
+    TContext
+> => {
+    const mutationOptions = getPublishModMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const saveModDetails = (
+    modDetailsRequest: BodyType<ModDetailsRequest>,
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/upload/details`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: modDetailsRequest,
+            signal,
+        },
+        options
+    )
+}
 
-export const getSaveModDetailsMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: BodyType<ModDetailsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: BodyType<ModDetailsRequest>}, TContext> => {
-
-const mutationKey = ['saveModDetails'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveModDetails>>, {data: BodyType<ModDetailsRequest>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  saveModDetails(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SaveModDetailsMutationResult = NonNullable<Awaited<ReturnType<typeof saveModDetails>>>
-    export type SaveModDetailsMutationBody = BodyType<ModDetailsRequest>
-    export type SaveModDetailsMutationError = ErrorType<unknown>
-
-    export const useSaveModDetails = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveModDetails>>, TError,{data: BodyType<ModDetailsRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getSaveModDetailsMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof saveModDetails>>,
         TError,
-        {data: BodyType<ModDetailsRequest>},
+        { data: BodyType<ModDetailsRequest> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof saveModDetails>>,
+    TError,
+    { data: BodyType<ModDetailsRequest> },
+    TContext
+> => {
+    const mutationKey = ['saveModDetails']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getSaveModDetailsMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof saveModDetails>>,
+        { data: BodyType<ModDetailsRequest> }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return saveModDetails(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type SaveModDetailsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof saveModDetails>>
+>
+export type SaveModDetailsMutationBody = BodyType<ModDetailsRequest>
+export type SaveModDetailsMutationError = ErrorType<unknown>
+
+export const useSaveModDetails = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof saveModDetails>>,
+            TError,
+            { data: BodyType<ModDetailsRequest> },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof saveModDetails>>,
+    TError,
+    { data: BodyType<ModDetailsRequest> },
+    TContext
+> => {
+    const mutationOptions = getSaveModDetailsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

@@ -4,287 +4,316 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useInfiniteQuery,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseInfiniteQueryResult,
-  DefinedUseQueryResult,
-  InfiniteData,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
+    DataTag,
+    DefinedInitialDataOptions,
+    DefinedUseQueryResult,
+    QueryClient,
+    QueryFunction,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    UseQueryOptions,
+    UseQueryResult,
+    UseSuspenseQueryOptions,
+    UseSuspenseQueryResult,
+} from '@tanstack/react-query'
 
-import type {
-  ApiResponseListDLCResponse
-} from '../endpoints.schemas';
+import type { ApiResponseListDLCResponse } from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const getGameDLCs = (
     gameId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseListDLCResponse>(
-      {url: `http://localhost:8080/api/v1/games/${gameId}/dlcs`, method: 'GET', signal
-    },
-      options);
+    return customInstance<ApiResponseListDLCResponse>(
+        {
+            url: `http://localhost:8080/api/v1/games/${gameId}/dlcs`,
+            method: 'GET',
+            signal,
+        },
+        options
+    )
+}
+
+export const getGetGameDLCsQueryKey = (gameId?: number) => {
+    return [`http://localhost:8080/api/v1/games/${gameId}/dlcs`] as const
+}
+
+export const getGetGameDLCsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
     }
-  
-
-export const getGetGameDLCsQueryKey = (gameId?: number,) => {
-    return [`http://localhost:8080/api/v1/games/${gameId}/dlcs`] as const;
-    }
-
-    
-export const getGetGameDLCsInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({
+        signal,
+    }) => getGameDLCs(gameId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameId), ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!gameId,
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getGameDLCs>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGameDLCsInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGameDLCs>>>
-export type GetGameDLCsInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
- gameId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGameDLCs>>,
-          TError,
-          Awaited<ReturnType<typeof getGameDLCs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGameDLCs>>,
-          TError,
-          Awaited<ReturnType<typeof getGameDLCs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetGameDLCsInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetGameDLCsInfiniteQueryOptions(gameId,options)
-
-  const query = useInfiniteQuery(queryOptions , queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetGameDLCsQueryOptions = <TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetGameDLCsQueryResult = NonNullable<Awaited<ReturnType<typeof getGameDLCs>>>
+export type GetGameDLCsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getGameDLCs>>
+>
 export type GetGameDLCsQueryError = ErrorType<unknown>
 
-
-export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
- gameId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGameDLCs>>,
-          TError,
-          Awaited<ReturnType<typeof getGameDLCs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGameDLCs>>,
-          TError,
-          Awaited<ReturnType<typeof getGameDLCs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetGameDLCs<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetGameDLCsQueryOptions(gameId,options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export function useGetGameDLCs<
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getGameDLCs>>,
+                    TError,
+                    Awaited<ReturnType<typeof getGameDLCs>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetGameDLCs<
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getGameDLCs>>,
+                    TError,
+                    Awaited<ReturnType<typeof getGameDLCs>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetGameDLCs<
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useGetGameDLCs<
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetGameDLCsQueryOptions(gameId, options)
 
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export const getGetGameDLCsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export const getGetGameDLCsSuspenseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    }
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({
+        signal,
+    }) => getGameDLCs(gameId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGameDLCs>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGameDLCsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGameDLCs>>>
+export type GetGameDLCsSuspenseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getGameDLCs>>
+>
 export type GetGameDLCsSuspenseQueryError = ErrorType<unknown>
 
-
-export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
- gameId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetGameDLCsSuspense<TData = Awaited<ReturnType<typeof getGameDLCs>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetGameDLCsSuspenseQueryOptions(gameId,options)
-
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export function useGetGameDLCsSuspense<
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options: {
+        query: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetGameDLCsSuspense<
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetGameDLCsSuspense<
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useGetGameDLCsSuspense<
+    TData = Awaited<ReturnType<typeof getGameDLCs>>,
+    TError = ErrorType<unknown>,
+>(
+    gameId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getGameDLCs>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetGameDLCsSuspenseQueryOptions(gameId, options)
 
+    const query = useSuspenseQuery(
+        queryOptions,
+        queryClient
+    ) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-export const getGetGameDLCsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+    query.queryKey = queryOptions.queryKey
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetGameDLCsQueryKey(gameId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGameDLCs>>> = ({ signal }) => getGameDLCs(gameId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return query
 }
-
-export type GetGameDLCsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGameDLCs>>>
-export type GetGameDLCsSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
- gameId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetGameDLCsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGameDLCs>>>, TError = ErrorType<unknown>>(
- gameId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGameDLCs>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetGameDLCsSuspenseInfiniteQueryOptions(gameId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-

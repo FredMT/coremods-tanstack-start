@@ -4,474 +4,680 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 import type {
-  MutationFunction,
-  QueryClient,
-  UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+    MutationFunction,
+    QueryClient,
+    UseMutationOptions,
+    UseMutationResult,
+} from '@tanstack/react-query'
 
-import type {
-  ApiResponseVoid,
-  GameMod,
-  User
-} from '../endpoints.schemas';
+import type { ApiResponseVoid, GameMod, User } from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const blockUserFromMod = (
     userId: User,
     modId: GameMod,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/user/${userId}/blocks/mod/${modId}`, method: 'POST', signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/user/${userId}/blocks/mod/${modId}`,
+            method: 'POST',
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getBlockUserFromModMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof blockUserFromMod>>, TError,{userId: User;modId: GameMod}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof blockUserFromMod>>, TError,{userId: User;modId: GameMod}, TContext> => {
-
-const mutationKey = ['blockUserFromMod'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof blockUserFromMod>>, {userId: User;modId: GameMod}> = (props) => {
-          const {userId,modId} = props ?? {};
-
-          return  blockUserFromMod(userId,modId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type BlockUserFromModMutationResult = NonNullable<Awaited<ReturnType<typeof blockUserFromMod>>>
-    
-    export type BlockUserFromModMutationError = ErrorType<unknown>
-
-    export const useBlockUserFromMod = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof blockUserFromMod>>, TError,{userId: User;modId: GameMod}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getBlockUserFromModMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof blockUserFromMod>>,
         TError,
-        {userId: User;modId: GameMod},
+        { userId: User; modId: GameMod },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof blockUserFromMod>>,
+    TError,
+    { userId: User; modId: GameMod },
+    TContext
+> => {
+    const mutationKey = ['blockUserFromMod']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getBlockUserFromModMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof blockUserFromMod>>,
+        { userId: User; modId: GameMod }
+    > = (props) => {
+        const { userId, modId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return blockUserFromMod(userId, modId, requestOptions)
     }
-    export const unblockUserFromMod = (
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type BlockUserFromModMutationResult = NonNullable<
+    Awaited<ReturnType<typeof blockUserFromMod>>
+>
+
+export type BlockUserFromModMutationError = ErrorType<unknown>
+
+export const useBlockUserFromMod = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof blockUserFromMod>>,
+            TError,
+            { userId: User; modId: GameMod },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof blockUserFromMod>>,
+    TError,
+    { userId: User; modId: GameMod },
+    TContext
+> => {
+    const mutationOptions = getBlockUserFromModMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+export const unblockUserFromMod = (
     userId: User,
     modId: GameMod,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/user/${userId}/blocks/mod/${modId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/user/${userId}/blocks/mod/${modId}`,
+            method: 'DELETE',
+        },
+        options
+    )
+}
 
-
-export const getUnblockUserFromModMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromMod>>, TError,{userId: User;modId: GameMod}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromMod>>, TError,{userId: User;modId: GameMod}, TContext> => {
-
-const mutationKey = ['unblockUserFromMod'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unblockUserFromMod>>, {userId: User;modId: GameMod}> = (props) => {
-          const {userId,modId} = props ?? {};
-
-          return  unblockUserFromMod(userId,modId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UnblockUserFromModMutationResult = NonNullable<Awaited<ReturnType<typeof unblockUserFromMod>>>
-    
-    export type UnblockUserFromModMutationError = ErrorType<unknown>
-
-    export const useUnblockUserFromMod = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromMod>>, TError,{userId: User;modId: GameMod}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUnblockUserFromModMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof unblockUserFromMod>>,
         TError,
-        {userId: User;modId: GameMod},
+        { userId: User; modId: GameMod },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof unblockUserFromMod>>,
+    TError,
+    { userId: User; modId: GameMod },
+    TContext
+> => {
+    const mutationKey = ['unblockUserFromMod']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUnblockUserFromModMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof unblockUserFromMod>>,
+        { userId: User; modId: GameMod }
+    > = (props) => {
+        const { userId, modId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return unblockUserFromMod(userId, modId, requestOptions)
     }
-    export const blockUserFromInteraction = (
-    userId: User,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/user/${userId}/blocks/interaction`, method: 'POST', signal
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UnblockUserFromModMutationResult = NonNullable<
+    Awaited<ReturnType<typeof unblockUserFromMod>>
+>
+
+export type UnblockUserFromModMutationError = ErrorType<unknown>
+
+export const useUnblockUserFromMod = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof unblockUserFromMod>>,
+            TError,
+            { userId: User; modId: GameMod },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof unblockUserFromMod>>,
+    TError,
+    { userId: User; modId: GameMod },
+    TContext
+> => {
+    const mutationOptions = getUnblockUserFromModMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const blockUserFromInteraction = (
+    userId: User,
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/user/${userId}/blocks/interaction`,
+            method: 'POST',
+            signal,
+        },
+        options
+    )
+}
 
-export const getBlockUserFromInteractionMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof blockUserFromInteraction>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof blockUserFromInteraction>>, TError,{userId: User}, TContext> => {
-
-const mutationKey = ['blockUserFromInteraction'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof blockUserFromInteraction>>, {userId: User}> = (props) => {
-          const {userId} = props ?? {};
-
-          return  blockUserFromInteraction(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type BlockUserFromInteractionMutationResult = NonNullable<Awaited<ReturnType<typeof blockUserFromInteraction>>>
-    
-    export type BlockUserFromInteractionMutationError = ErrorType<unknown>
-
-    export const useBlockUserFromInteraction = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof blockUserFromInteraction>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getBlockUserFromInteractionMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof blockUserFromInteraction>>,
         TError,
-        {userId: User},
+        { userId: User },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof blockUserFromInteraction>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationKey = ['blockUserFromInteraction']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getBlockUserFromInteractionMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof blockUserFromInteraction>>,
+        { userId: User }
+    > = (props) => {
+        const { userId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return blockUserFromInteraction(userId, requestOptions)
     }
-    export const unblockUserFromInteraction = (
-    userId: User,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/user/${userId}/blocks/interaction`, method: 'DELETE'
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type BlockUserFromInteractionMutationResult = NonNullable<
+    Awaited<ReturnType<typeof blockUserFromInteraction>>
+>
+
+export type BlockUserFromInteractionMutationError = ErrorType<unknown>
+
+export const useBlockUserFromInteraction = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof blockUserFromInteraction>>,
+            TError,
+            { userId: User },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof blockUserFromInteraction>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationOptions = getBlockUserFromInteractionMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const unblockUserFromInteraction = (
+    userId: User,
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/user/${userId}/blocks/interaction`,
+            method: 'DELETE',
+        },
+        options
+    )
+}
 
-export const getUnblockUserFromInteractionMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromInteraction>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromInteraction>>, TError,{userId: User}, TContext> => {
-
-const mutationKey = ['unblockUserFromInteraction'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unblockUserFromInteraction>>, {userId: User}> = (props) => {
-          const {userId} = props ?? {};
-
-          return  unblockUserFromInteraction(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UnblockUserFromInteractionMutationResult = NonNullable<Awaited<ReturnType<typeof unblockUserFromInteraction>>>
-    
-    export type UnblockUserFromInteractionMutationError = ErrorType<unknown>
-
-    export const useUnblockUserFromInteraction = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromInteraction>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUnblockUserFromInteractionMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof unblockUserFromInteraction>>,
         TError,
-        {userId: User},
+        { userId: User },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof unblockUserFromInteraction>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationKey = ['unblockUserFromInteraction']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUnblockUserFromInteractionMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof unblockUserFromInteraction>>,
+        { userId: User }
+    > = (props) => {
+        const { userId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return unblockUserFromInteraction(userId, requestOptions)
     }
-    export const blockUserFromAuthorGlobally = (
-    userId: User,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/user/${userId}/blocks/global`, method: 'POST', signal
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UnblockUserFromInteractionMutationResult = NonNullable<
+    Awaited<ReturnType<typeof unblockUserFromInteraction>>
+>
+
+export type UnblockUserFromInteractionMutationError = ErrorType<unknown>
+
+export const useUnblockUserFromInteraction = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof unblockUserFromInteraction>>,
+            TError,
+            { userId: User },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof unblockUserFromInteraction>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationOptions =
+        getUnblockUserFromInteractionMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const blockUserFromAuthorGlobally = (
+    userId: User,
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/user/${userId}/blocks/global`,
+            method: 'POST',
+            signal,
+        },
+        options
+    )
+}
 
-export const getBlockUserFromAuthorGloballyMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>, TError,{userId: User}, TContext> => {
-
-const mutationKey = ['blockUserFromAuthorGlobally'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>, {userId: User}> = (props) => {
-          const {userId} = props ?? {};
-
-          return  blockUserFromAuthorGlobally(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type BlockUserFromAuthorGloballyMutationResult = NonNullable<Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>>
-    
-    export type BlockUserFromAuthorGloballyMutationError = ErrorType<unknown>
-
-    export const useBlockUserFromAuthorGlobally = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getBlockUserFromAuthorGloballyMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>,
         TError,
-        {userId: User},
+        { userId: User },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationKey = ['blockUserFromAuthorGlobally']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getBlockUserFromAuthorGloballyMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>,
+        { userId: User }
+    > = (props) => {
+        const { userId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return blockUserFromAuthorGlobally(userId, requestOptions)
     }
-    export const unblockUserFromAuthorGlobally = (
-    userId: User,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/user/${userId}/blocks/global`, method: 'DELETE'
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type BlockUserFromAuthorGloballyMutationResult = NonNullable<
+    Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>
+>
+
+export type BlockUserFromAuthorGloballyMutationError = ErrorType<unknown>
+
+export const useBlockUserFromAuthorGlobally = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>,
+            TError,
+            { userId: User },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof blockUserFromAuthorGlobally>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationOptions =
+        getBlockUserFromAuthorGloballyMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const unblockUserFromAuthorGlobally = (
+    userId: User,
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/user/${userId}/blocks/global`,
+            method: 'DELETE',
+        },
+        options
+    )
+}
 
-export const getUnblockUserFromAuthorGloballyMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>, TError,{userId: User}, TContext> => {
-
-const mutationKey = ['unblockUserFromAuthorGlobally'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>, {userId: User}> = (props) => {
-          const {userId} = props ?? {};
-
-          return  unblockUserFromAuthorGlobally(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UnblockUserFromAuthorGloballyMutationResult = NonNullable<Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>>
-    
-    export type UnblockUserFromAuthorGloballyMutationError = ErrorType<unknown>
-
-    export const useUnblockUserFromAuthorGlobally = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUnblockUserFromAuthorGloballyMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>,
         TError,
-        {userId: User},
+        { userId: User },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationKey = ['unblockUserFromAuthorGlobally']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUnblockUserFromAuthorGloballyMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>,
+        { userId: User }
+    > = (props) => {
+        const { userId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return unblockUserFromAuthorGlobally(userId, requestOptions)
     }
-    export const blockUserFromDM = (
-    userId: User,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/user/${userId}/blocks/dm`, method: 'POST', signal
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UnblockUserFromAuthorGloballyMutationResult = NonNullable<
+    Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>
+>
+
+export type UnblockUserFromAuthorGloballyMutationError = ErrorType<unknown>
+
+export const useUnblockUserFromAuthorGlobally = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>,
+            TError,
+            { userId: User },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof unblockUserFromAuthorGlobally>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationOptions =
+        getUnblockUserFromAuthorGloballyMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const blockUserFromDM = (
+    userId: User,
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/user/${userId}/blocks/dm`,
+            method: 'POST',
+            signal,
+        },
+        options
+    )
+}
 
-export const getBlockUserFromDMMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof blockUserFromDM>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof blockUserFromDM>>, TError,{userId: User}, TContext> => {
-
-const mutationKey = ['blockUserFromDM'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof blockUserFromDM>>, {userId: User}> = (props) => {
-          const {userId} = props ?? {};
-
-          return  blockUserFromDM(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type BlockUserFromDMMutationResult = NonNullable<Awaited<ReturnType<typeof blockUserFromDM>>>
-    
-    export type BlockUserFromDMMutationError = ErrorType<unknown>
-
-    export const useBlockUserFromDM = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof blockUserFromDM>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getBlockUserFromDMMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof blockUserFromDM>>,
         TError,
-        {userId: User},
+        { userId: User },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof blockUserFromDM>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationKey = ['blockUserFromDM']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getBlockUserFromDMMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof blockUserFromDM>>,
+        { userId: User }
+    > = (props) => {
+        const { userId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return blockUserFromDM(userId, requestOptions)
     }
-    export const unblockUserFromDirectMessages = (
-    userId: User,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/user/${userId}/blocks/dm`, method: 'DELETE'
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type BlockUserFromDMMutationResult = NonNullable<
+    Awaited<ReturnType<typeof blockUserFromDM>>
+>
+
+export type BlockUserFromDMMutationError = ErrorType<unknown>
+
+export const useBlockUserFromDM = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof blockUserFromDM>>,
+            TError,
+            { userId: User },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof blockUserFromDM>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationOptions = getBlockUserFromDMMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const unblockUserFromDirectMessages = (
+    userId: User,
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/user/${userId}/blocks/dm`,
+            method: 'DELETE',
+        },
+        options
+    )
+}
 
-export const getUnblockUserFromDirectMessagesMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromDirectMessages>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromDirectMessages>>, TError,{userId: User}, TContext> => {
-
-const mutationKey = ['unblockUserFromDirectMessages'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unblockUserFromDirectMessages>>, {userId: User}> = (props) => {
-          const {userId} = props ?? {};
-
-          return  unblockUserFromDirectMessages(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UnblockUserFromDirectMessagesMutationResult = NonNullable<Awaited<ReturnType<typeof unblockUserFromDirectMessages>>>
-    
-    export type UnblockUserFromDirectMessagesMutationError = ErrorType<unknown>
-
-    export const useUnblockUserFromDirectMessages = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unblockUserFromDirectMessages>>, TError,{userId: User}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUnblockUserFromDirectMessagesMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof unblockUserFromDirectMessages>>,
         TError,
-        {userId: User},
+        { userId: User },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof unblockUserFromDirectMessages>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationKey = ['unblockUserFromDirectMessages']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUnblockUserFromDirectMessagesMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof unblockUserFromDirectMessages>>,
+        { userId: User }
+    > = (props) => {
+        const { userId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return unblockUserFromDirectMessages(userId, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UnblockUserFromDirectMessagesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof unblockUserFromDirectMessages>>
+>
+
+export type UnblockUserFromDirectMessagesMutationError = ErrorType<unknown>
+
+export const useUnblockUserFromDirectMessages = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof unblockUserFromDirectMessages>>,
+            TError,
+            { userId: User },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof unblockUserFromDirectMessages>>,
+    TError,
+    { userId: User },
+    TContext
+> => {
+    const mutationOptions =
+        getUnblockUserFromDirectMessagesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

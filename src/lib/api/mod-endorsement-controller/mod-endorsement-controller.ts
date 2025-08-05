@@ -4,137 +4,179 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 import type {
-  MutationFunction,
-  QueryClient,
-  UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+    MutationFunction,
+    QueryClient,
+    UseMutationOptions,
+    UseMutationResult,
+} from '@tanstack/react-query'
 
-import type {
-  ApiResponseVoid
-} from '../endpoints.schemas';
+import type { ApiResponseVoid } from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const endorseMod = (
     modId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/endorsements`, method: 'POST', signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/endorsements`,
+            method: 'POST',
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getEndorseModMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof endorseMod>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof endorseMod>>, TError,{modId: number}, TContext> => {
-
-const mutationKey = ['endorseMod'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof endorseMod>>, {modId: number}> = (props) => {
-          const {modId} = props ?? {};
-
-          return  endorseMod(modId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type EndorseModMutationResult = NonNullable<Awaited<ReturnType<typeof endorseMod>>>
-    
-    export type EndorseModMutationError = ErrorType<unknown>
-
-    export const useEndorseMod = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof endorseMod>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getEndorseModMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof endorseMod>>,
         TError,
-        {modId: number},
+        { modId: number },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof endorseMod>>,
+    TError,
+    { modId: number },
+    TContext
+> => {
+    const mutationKey = ['endorseMod']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getEndorseModMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof endorseMod>>,
+        { modId: number }
+    > = (props) => {
+        const { modId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return endorseMod(modId, requestOptions)
     }
-    export const removeEndorsement = (
-    modId: number,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<null>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/endorsements`, method: 'DELETE'
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type EndorseModMutationResult = NonNullable<
+    Awaited<ReturnType<typeof endorseMod>>
+>
+
+export type EndorseModMutationError = ErrorType<unknown>
+
+export const useEndorseMod = <TError = ErrorType<unknown>, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof endorseMod>>,
+            TError,
+            { modId: number },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof endorseMod>>,
+    TError,
+    { modId: number },
+    TContext
+> => {
+    const mutationOptions = getEndorseModMutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const removeEndorsement = (
+    modId: number,
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<null>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/endorsements`,
+            method: 'DELETE',
+        },
+        options
+    )
+}
 
-export const getRemoveEndorsementMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeEndorsement>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeEndorsement>>, TError,{modId: number}, TContext> => {
-
-const mutationKey = ['removeEndorsement'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeEndorsement>>, {modId: number}> = (props) => {
-          const {modId} = props ?? {};
-
-          return  removeEndorsement(modId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveEndorsementMutationResult = NonNullable<Awaited<ReturnType<typeof removeEndorsement>>>
-    
-    export type RemoveEndorsementMutationError = ErrorType<unknown>
-
-    export const useRemoveEndorsement = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeEndorsement>>, TError,{modId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getRemoveEndorsementMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof removeEndorsement>>,
         TError,
-        {modId: number},
+        { modId: number },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof removeEndorsement>>,
+    TError,
+    { modId: number },
+    TContext
+> => {
+    const mutationKey = ['removeEndorsement']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getRemoveEndorsementMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof removeEndorsement>>,
+        { modId: number }
+    > = (props) => {
+        const { modId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return removeEndorsement(modId, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type RemoveEndorsementMutationResult = NonNullable<
+    Awaited<ReturnType<typeof removeEndorsement>>
+>
+
+export type RemoveEndorsementMutationError = ErrorType<unknown>
+
+export const useRemoveEndorsement = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof removeEndorsement>>,
+            TError,
+            { modId: number },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof removeEndorsement>>,
+    TError,
+    { modId: number },
+    TContext
+> => {
+    const mutationOptions = getRemoveEndorsementMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

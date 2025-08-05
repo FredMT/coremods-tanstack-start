@@ -4,82 +4,101 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 import type {
-  MutationFunction,
-  QueryClient,
-  UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+    MutationFunction,
+    QueryClient,
+    UseMutationOptions,
+    UseMutationResult,
+} from '@tanstack/react-query'
 
-import type {
-  ApiResponseVoid
-} from '../endpoints.schemas';
+import type { ApiResponseVoid } from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const createPresetCategories = (
     gameId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/games/categories/${gameId}/create-preset-categories`, method: 'POST', signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/games/categories/${gameId}/create-preset-categories`,
+            method: 'POST',
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getCreatePresetCategoriesMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPresetCategories>>, TError,{gameId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createPresetCategories>>, TError,{gameId: number}, TContext> => {
-
-const mutationKey = ['createPresetCategories'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPresetCategories>>, {gameId: number}> = (props) => {
-          const {gameId} = props ?? {};
-
-          return  createPresetCategories(gameId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreatePresetCategoriesMutationResult = NonNullable<Awaited<ReturnType<typeof createPresetCategories>>>
-    
-    export type CreatePresetCategoriesMutationError = ErrorType<unknown>
-
-    export const useCreatePresetCategories = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPresetCategories>>, TError,{gameId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getCreatePresetCategoriesMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof createPresetCategories>>,
         TError,
-        {gameId: number},
+        { gameId: number },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof createPresetCategories>>,
+    TError,
+    { gameId: number },
+    TContext
+> => {
+    const mutationKey = ['createPresetCategories']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getCreatePresetCategoriesMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof createPresetCategories>>,
+        { gameId: number }
+    > = (props) => {
+        const { gameId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return createPresetCategories(gameId, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CreatePresetCategoriesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof createPresetCategories>>
+>
+
+export type CreatePresetCategoriesMutationError = ErrorType<unknown>
+
+export const useCreatePresetCategories = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof createPresetCategories>>,
+            TError,
+            { gameId: number },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof createPresetCategories>>,
+    TError,
+    { gameId: number },
+    TContext
+> => {
+    const mutationOptions = getCreatePresetCategoriesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

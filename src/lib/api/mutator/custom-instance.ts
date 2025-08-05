@@ -1,5 +1,4 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios'
-
 export const AXIOS_INSTANCE = Axios.create({
     baseURL: 'http://localhost:8080',
 })
@@ -29,10 +28,11 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
 
 AXIOS_INSTANCE.interceptors.response.use(
     (response) => {
-        const setCookieHeader = response.headers['set-cookie']
-        if (setCookieHeader && typeof document !== 'undefined') {
-            processCookieHeaders(setCookieHeader)
-        }
+        // const setCookieHeader = response.headers['set-cookie']
+
+        // if (setCookieHeader && typeof document !== 'undefined') {
+        //     processCookieHeaders(setCookieHeader)
+        // }
         return response
     },
     (error) => {

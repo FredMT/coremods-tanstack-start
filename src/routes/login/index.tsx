@@ -1,13 +1,20 @@
 import { Separator } from '@/components/ui/separator'
+import { getUser } from '@/fn/getUser'
 import { Login } from '@/routes/login/-components/Login'
 import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/login/')({
     component: LoginPage,
     beforeLoad: async ({ context }) => {
-        if (context.user) {
-            throw redirect({ to: '/' })
+        const data = await getUser()
+
+        if (!data) {
+            context.queryClient.setQueryData(['authenticated-user'], null)
         }
+
+        throw redirect({
+            to: '/',
+        })
     },
 })
 

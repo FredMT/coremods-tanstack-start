@@ -67,7 +67,7 @@ export const loginServerFn = createServerFn({ method: 'POST' })
                 })
             }
 
-            console.log('Error:', error)
+
             throw error
         }
     })

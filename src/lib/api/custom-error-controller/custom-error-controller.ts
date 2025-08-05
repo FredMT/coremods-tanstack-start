@@ -4,569 +4,669 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseInfiniteQueryResult,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
+    DataTag,
+    DefinedInitialDataOptions,
+    DefinedUseQueryResult,
+    MutationFunction,
+    QueryClient,
+    QueryFunction,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    UseMutationOptions,
+    UseMutationResult,
+    UseQueryOptions,
+    UseQueryResult,
+    UseSuspenseQueryOptions,
+    UseSuspenseQueryResult,
+} from '@tanstack/react-query'
 
-import type {
-  ApiResponseVoid
-} from '../endpoints.schemas';
+import type { ApiResponseVoid } from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const handleError = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/error`, method: 'GET', signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseVoid>(
+        { url: `http://localhost:8080/error`, method: 'GET', signal },
+        options
+    )
+}
 
 export const getHandleErrorQueryKey = () => {
-    return [`http://localhost:8080/error`] as const;
-    }
-
-    
-export const getHandleErrorInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getHandleErrorQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof handleError>>> = ({ signal }) => handleError(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`http://localhost:8080/error`] as const
 }
 
-export type HandleErrorInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof handleError>>>
-export type HandleErrorInfiniteQueryError = ErrorType<unknown>
+export const getHandleErrorQueryOptions = <
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customInstance>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getHandleErrorQueryKey()
 
-export function useHandleErrorInfinite<TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof handleError>>,
-          TError,
-          Awaited<ReturnType<typeof handleError>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHandleErrorInfinite<TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof handleError>>,
-          TError,
-          Awaited<ReturnType<typeof handleError>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHandleErrorInfinite<TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof handleError>>> = ({
+        signal,
+    }) => handleError(requestOptions, signal)
 
-export function useHandleErrorInfinite<TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getHandleErrorInfiniteQueryOptions(options)
-
-  const query = useInfiniteQuery(queryOptions , queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof handleError>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-
-
-export const getHandleErrorQueryOptions = <TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getHandleErrorQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof handleError>>> = ({ signal }) => handleError(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type HandleErrorQueryResult = NonNullable<Awaited<ReturnType<typeof handleError>>>
+export type HandleErrorQueryResult = NonNullable<
+    Awaited<ReturnType<typeof handleError>>
+>
 export type HandleErrorQueryError = ErrorType<unknown>
 
-
-export function useHandleError<TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof handleError>>,
-          TError,
-          Awaited<ReturnType<typeof handleError>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHandleError<TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof handleError>>,
-          TError,
-          Awaited<ReturnType<typeof handleError>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHandleError<TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useHandleError<TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getHandleErrorQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export function useHandleError<
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof handleError>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof handleError>>,
+                    TError,
+                    Awaited<ReturnType<typeof handleError>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useHandleError<
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof handleError>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof handleError>>,
+                    TError,
+                    Awaited<ReturnType<typeof handleError>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useHandleError<
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof handleError>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useHandleError<
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof handleError>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getHandleErrorQueryOptions(options)
 
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export const getHandleErrorSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+    query.queryKey = queryOptions.queryKey
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getHandleErrorQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof handleError>>> = ({ signal }) => handleError(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return query
 }
 
-export type HandleErrorSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof handleError>>>
+export const getHandleErrorSuspenseQueryOptions = <
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(options?: {
+    query?: Partial<
+        UseSuspenseQueryOptions<
+            Awaited<ReturnType<typeof handleError>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customInstance>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getHandleErrorQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof handleError>>> = ({
+        signal,
+    }) => handleError(requestOptions, signal)
+
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof handleError>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type HandleErrorSuspenseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof handleError>>
+>
 export type HandleErrorSuspenseQueryError = ErrorType<unknown>
 
-
-export function useHandleErrorSuspense<TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHandleErrorSuspense<TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHandleErrorSuspense<TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useHandleErrorSuspense<TData = Awaited<ReturnType<typeof handleError>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getHandleErrorSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export function useHandleErrorSuspense<
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(
+    options: {
+        query: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof handleError>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useHandleErrorSuspense<
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof handleError>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useHandleErrorSuspense<
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof handleError>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useHandleErrorSuspense<
+    TData = Awaited<ReturnType<typeof handleError>>,
+    TError = ErrorType<unknown>,
+>(
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof handleError>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getHandleErrorSuspenseQueryOptions(options)
 
+    const query = useSuspenseQuery(
+        queryOptions,
+        queryClient
+    ) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-export const getHandleErrorSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+    query.queryKey = queryOptions.queryKey
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getHandleErrorQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof handleError>>> = ({ signal }) => handleError(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return query
 }
-
-export type HandleErrorSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof handleError>>>
-export type HandleErrorSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useHandleErrorSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHandleErrorSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHandleErrorSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useHandleErrorSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof handleError>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof handleError>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getHandleErrorSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
 
 export const handleError2 = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/error`, method: 'PUT'
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        { url: `http://localhost:8080/error`, method: 'PUT' },
+        options
+    )
+}
 
-
-export const getHandleError2MutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError2>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof handleError2>>, TError,void, TContext> => {
-
-const mutationKey = ['handleError2'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof handleError2>>, void> = () => {
-          
-
-          return  handleError2(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type HandleError2MutationResult = NonNullable<Awaited<ReturnType<typeof handleError2>>>
-    
-    export type HandleError2MutationError = ErrorType<unknown>
-
-    export const useHandleError2 = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError2>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getHandleError2MutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof handleError2>>,
         TError,
         void,
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof handleError2>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationKey = ['handleError2']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getHandleError2MutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof handleError2>>,
+        void
+    > = () => {
+        return handleError2(requestOptions)
     }
-    export const handleError1 = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/error`, method: 'POST', signal
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type HandleError2MutationResult = NonNullable<
+    Awaited<ReturnType<typeof handleError2>>
+>
+
+export type HandleError2MutationError = ErrorType<unknown>
+
+export const useHandleError2 = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof handleError2>>,
+            TError,
+            void,
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof handleError2>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationOptions = getHandleError2MutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const handleError1 = (
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
+) => {
+    return customInstance<ApiResponseVoid>(
+        { url: `http://localhost:8080/error`, method: 'POST', signal },
+        options
+    )
+}
 
-export const getHandleError1MutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError1>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof handleError1>>, TError,void, TContext> => {
-
-const mutationKey = ['handleError1'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof handleError1>>, void> = () => {
-          
-
-          return  handleError1(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type HandleError1MutationResult = NonNullable<Awaited<ReturnType<typeof handleError1>>>
-    
-    export type HandleError1MutationError = ErrorType<unknown>
-
-    export const useHandleError1 = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError1>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getHandleError1MutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof handleError1>>,
         TError,
         void,
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof handleError1>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationKey = ['handleError1']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getHandleError1MutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof handleError1>>,
+        void
+    > = () => {
+        return handleError1(requestOptions)
     }
-    export const handleError3 = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/error`, method: 'DELETE'
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type HandleError1MutationResult = NonNullable<
+    Awaited<ReturnType<typeof handleError1>>
+>
+
+export type HandleError1MutationError = ErrorType<unknown>
+
+export const useHandleError1 = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof handleError1>>,
+            TError,
+            void,
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof handleError1>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationOptions = getHandleError1MutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const handleError3 = (
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        { url: `http://localhost:8080/error`, method: 'DELETE' },
+        options
+    )
+}
 
-export const getHandleError3MutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError3>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof handleError3>>, TError,void, TContext> => {
-
-const mutationKey = ['handleError3'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof handleError3>>, void> = () => {
-          
-
-          return  handleError3(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type HandleError3MutationResult = NonNullable<Awaited<ReturnType<typeof handleError3>>>
-    
-    export type HandleError3MutationError = ErrorType<unknown>
-
-    export const useHandleError3 = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError3>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getHandleError3MutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof handleError3>>,
         TError,
         void,
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof handleError3>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationKey = ['handleError3']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getHandleError3MutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof handleError3>>,
+        void
+    > = () => {
+        return handleError3(requestOptions)
     }
-    export const handleError5 = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/error`, method: 'HEAD', signal
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type HandleError3MutationResult = NonNullable<
+    Awaited<ReturnType<typeof handleError3>>
+>
+
+export type HandleError3MutationError = ErrorType<unknown>
+
+export const useHandleError3 = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof handleError3>>,
+            TError,
+            void,
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof handleError3>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationOptions = getHandleError3MutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const handleError5 = (
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
+) => {
+    return customInstance<ApiResponseVoid>(
+        { url: `http://localhost:8080/error`, method: 'HEAD', signal },
+        options
+    )
+}
 
-export const getHandleError5MutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError5>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof handleError5>>, TError,void, TContext> => {
-
-const mutationKey = ['handleError5'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof handleError5>>, void> = () => {
-          
-
-          return  handleError5(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type HandleError5MutationResult = NonNullable<Awaited<ReturnType<typeof handleError5>>>
-    
-    export type HandleError5MutationError = ErrorType<unknown>
-
-    export const useHandleError5 = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError5>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getHandleError5MutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof handleError5>>,
         TError,
         void,
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof handleError5>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationKey = ['handleError5']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getHandleError5MutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof handleError5>>,
+        void
+    > = () => {
+        return handleError5(requestOptions)
     }
-    export const handleError4 = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/error`, method: 'PATCH'
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type HandleError5MutationResult = NonNullable<
+    Awaited<ReturnType<typeof handleError5>>
+>
+
+export type HandleError5MutationError = ErrorType<unknown>
+
+export const useHandleError5 = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof handleError5>>,
+            TError,
+            void,
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
     },
-      options);
-    }
-  
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof handleError5>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationOptions = getHandleError5MutationOptions(options)
 
+    return useMutation(mutationOptions, queryClient)
+}
+export const handleError4 = (
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        { url: `http://localhost:8080/error`, method: 'PATCH' },
+        options
+    )
+}
 
-export const getHandleError4MutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError4>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof handleError4>>, TError,void, TContext> => {
-
-const mutationKey = ['handleError4'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof handleError4>>, void> = () => {
-          
-
-          return  handleError4(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type HandleError4MutationResult = NonNullable<Awaited<ReturnType<typeof handleError4>>>
-    
-    export type HandleError4MutationError = ErrorType<unknown>
-
-    export const useHandleError4 = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof handleError4>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getHandleError4MutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof handleError4>>,
         TError,
         void,
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof handleError4>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationKey = ['handleError4']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getHandleError4MutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof handleError4>>,
+        void
+    > = () => {
+        return handleError4(requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type HandleError4MutationResult = NonNullable<
+    Awaited<ReturnType<typeof handleError4>>
+>
+
+export type HandleError4MutationError = ErrorType<unknown>
+
+export const useHandleError4 = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof handleError4>>,
+            TError,
+            void,
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof handleError4>>,
+    TError,
+    void,
+    TContext
+> => {
+    const mutationOptions = getHandleError4MutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

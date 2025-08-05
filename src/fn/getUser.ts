@@ -26,6 +26,6 @@ export const getUser = createServerFn({
             deleteCookie('SESSION')
             return null
         }
-        return null
+        return
     }
 })

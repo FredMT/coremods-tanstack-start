@@ -1,8 +1,7 @@
-import { useRouteContext } from '@tanstack/react-router'
-
 import { AuthedSheet } from '@/components/navbar/BelowLg/AuthedSheet'
 import { UnauthedSheet } from '@/components/navbar/BelowLg/UnauthedSheet'
 import { Button } from '@/components/ui/button'
+import { useUser } from '@/lib/react-query-auth/config'
 import { BellIcon, MailIcon } from 'lucide-react'
 
 export function AuthBelowLg({
@@ -12,17 +11,21 @@ export function AuthBelowLg({
     isLoginPage: boolean
     isRegisterPage: boolean
 }) {
-    const context = useRouteContext({ from: '__root__' })
-    const user = context.user
+    const user = useUser({
+        retry: false,
+    })
+
+    if (user.isLoading) return <div>Loading...</div>
+
     return (
         <>
-            {!user && (
+            {!user.data && (
                 <UnauthedSheet
                     isLoginPage={isLoginPage}
                     isRegisterPage={isRegisterPage}
                 />
             )}
-            {user && (
+            {user.data && (
                 <div className="flex gap-x-2">
                     <Button
                         variant="ghost"

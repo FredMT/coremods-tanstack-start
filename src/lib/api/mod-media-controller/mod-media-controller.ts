@@ -4,55 +4,40 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseInfiniteQueryResult,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
+    DataTag,
+    DefinedInitialDataOptions,
+    DefinedUseQueryResult,
+    MutationFunction,
+    QueryClient,
+    QueryFunction,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    UseMutationOptions,
+    UseMutationResult,
+    UseQueryOptions,
+    UseQueryResult,
+    UseSuspenseQueryOptions,
+    UseSuspenseQueryResult,
+} from '@tanstack/react-query'
 
 import type {
-  ApiResponseImage,
-  ApiResponseListImage,
-  ApiResponseListYouTubeVideoResponse,
-  ApiResponseVoid,
-  ApiResponseYouTubeVideoResponse,
-  UploadHeaderImageBody,
-  UploadModImageBody,
-  YouTubeVideoRequest,
-  YouTubeVideoUpdateRequest
-} from '../endpoints.schemas';
+    ApiResponseImage,
+    ApiResponseListImage,
+    ApiResponseListYouTubeVideoResponse,
+    ApiResponseVoid,
+    ApiResponseYouTubeVideoResponse,
+    UploadHeaderImageBody,
+    UploadModImageBody,
+    YouTubeVideoRequest,
+    YouTubeVideoUpdateRequest,
+} from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType , BodyType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType, BodyType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 /**
  * Update YouTube video title and description
@@ -62,388 +47,507 @@ export const updateYouTubeVideo = (
     gameModId: number,
     videoId: number,
     youTubeVideoUpdateRequest: BodyType<YouTubeVideoUpdateRequest>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseYouTubeVideoResponse>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos/${videoId}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: youTubeVideoUpdateRequest
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseYouTubeVideoResponse>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos/${videoId}`,
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            data: youTubeVideoUpdateRequest,
+        },
+        options
+    )
+}
 
-
-export const getUpdateYouTubeVideoMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>}, TContext> => {
-
-const mutationKey = ['updateYouTubeVideo'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateYouTubeVideo>>, {gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>}> = (props) => {
-          const {gameModId,videoId,data} = props ?? {};
-
-          return  updateYouTubeVideo(gameModId,videoId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateYouTubeVideoMutationResult = NonNullable<Awaited<ReturnType<typeof updateYouTubeVideo>>>
-    export type UpdateYouTubeVideoMutationBody = BodyType<YouTubeVideoUpdateRequest>
-    export type UpdateYouTubeVideoMutationError = ErrorType<unknown>
-
-    /**
- * @summary Update YouTube video
- */
-export const useUpdateYouTubeVideo = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateYouTubeVideo>>, TError,{gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUpdateYouTubeVideoMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof updateYouTubeVideo>>,
         TError,
-        {gameModId: number;videoId: number;data: BodyType<YouTubeVideoUpdateRequest>},
+        {
+            gameModId: number
+            videoId: number
+            data: BodyType<YouTubeVideoUpdateRequest>
+        },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof updateYouTubeVideo>>,
+    TError,
+    {
+        gameModId: number
+        videoId: number
+        data: BodyType<YouTubeVideoUpdateRequest>
+    },
+    TContext
+> => {
+    const mutationKey = ['updateYouTubeVideo']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUpdateYouTubeVideoMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof updateYouTubeVideo>>,
+        {
+            gameModId: number
+            videoId: number
+            data: BodyType<YouTubeVideoUpdateRequest>
+        }
+    > = (props) => {
+        const { gameModId, videoId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return updateYouTubeVideo(gameModId, videoId, data, requestOptions)
     }
-    /**
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UpdateYouTubeVideoMutationResult = NonNullable<
+    Awaited<ReturnType<typeof updateYouTubeVideo>>
+>
+export type UpdateYouTubeVideoMutationBody = BodyType<YouTubeVideoUpdateRequest>
+export type UpdateYouTubeVideoMutationError = ErrorType<unknown>
+
+/**
+ * @summary Update YouTube video
+ */
+export const useUpdateYouTubeVideo = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof updateYouTubeVideo>>,
+            TError,
+            {
+                gameModId: number
+                videoId: number
+                data: BodyType<YouTubeVideoUpdateRequest>
+            },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof updateYouTubeVideo>>,
+    TError,
+    {
+        gameModId: number
+        videoId: number
+        data: BodyType<YouTubeVideoUpdateRequest>
+    },
+    TContext
+> => {
+    const mutationOptions = getUpdateYouTubeVideoMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+/**
  * Delete a YouTube video link
  * @summary Delete YouTube video
  */
 export const deleteYouTubeVideo = (
     gameModId: number,
     videoId: number,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos/${videoId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos/${videoId}`,
+            method: 'DELETE',
+        },
+        options
+    )
+}
 
-
-export const getDeleteYouTubeVideoMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteYouTubeVideo>>, TError,{gameModId: number;videoId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteYouTubeVideo>>, TError,{gameModId: number;videoId: number}, TContext> => {
-
-const mutationKey = ['deleteYouTubeVideo'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteYouTubeVideo>>, {gameModId: number;videoId: number}> = (props) => {
-          const {gameModId,videoId} = props ?? {};
-
-          return  deleteYouTubeVideo(gameModId,videoId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteYouTubeVideoMutationResult = NonNullable<Awaited<ReturnType<typeof deleteYouTubeVideo>>>
-    
-    export type DeleteYouTubeVideoMutationError = ErrorType<unknown>
-
-    /**
- * @summary Delete YouTube video
- */
-export const useDeleteYouTubeVideo = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteYouTubeVideo>>, TError,{gameModId: number;videoId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getDeleteYouTubeVideoMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof deleteYouTubeVideo>>,
         TError,
-        {gameModId: number;videoId: number},
+        { gameModId: number; videoId: number },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof deleteYouTubeVideo>>,
+    TError,
+    { gameModId: number; videoId: number },
+    TContext
+> => {
+    const mutationKey = ['deleteYouTubeVideo']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getDeleteYouTubeVideoMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof deleteYouTubeVideo>>,
+        { gameModId: number; videoId: number }
+    > = (props) => {
+        const { gameModId, videoId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return deleteYouTubeVideo(gameModId, videoId, requestOptions)
     }
-    /**
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteYouTubeVideoMutationResult = NonNullable<
+    Awaited<ReturnType<typeof deleteYouTubeVideo>>
+>
+
+export type DeleteYouTubeVideoMutationError = ErrorType<unknown>
+
+/**
+ * @summary Delete YouTube video
+ */
+export const useDeleteYouTubeVideo = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof deleteYouTubeVideo>>,
+            TError,
+            { gameModId: number; videoId: number },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof deleteYouTubeVideo>>,
+    TError,
+    { gameModId: number; videoId: number },
+    TContext
+> => {
+    const mutationOptions = getDeleteYouTubeVideoMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+/**
  * Retrieve all YouTube videos for a mod
  * @summary Get YouTube videos
  */
 export const getYouTubeVideos = (
     gameModId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseListYouTubeVideoResponse>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`, method: 'GET', signal
-    },
-      options);
+    return customInstance<ApiResponseListYouTubeVideoResponse>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`,
+            method: 'GET',
+            signal,
+        },
+        options
+    )
+}
+
+export const getGetYouTubeVideosQueryKey = (gameModId?: number) => {
+    return [
+        `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`,
+    ] as const
+}
+
+export const getGetYouTubeVideosQueryOptions = <
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
     }
-  
-
-export const getGetYouTubeVideosQueryKey = (gameModId?: number,) => {
-    return [`http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`] as const;
-    }
-
-    
-export const getGetYouTubeVideosInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey =
+        queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId);
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getYouTubeVideos>>
+    > = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameModId), ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!gameModId,
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getYouTubeVideos>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetYouTubeVideosInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getYouTubeVideos>>>
-export type GetYouTubeVideosInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getYouTubeVideos>>,
-          TError,
-          Awaited<ReturnType<typeof getYouTubeVideos>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getYouTubeVideos>>,
-          TError,
-          Awaited<ReturnType<typeof getYouTubeVideos>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Get YouTube videos
- */
-
-export function useGetYouTubeVideosInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetYouTubeVideosInfiniteQueryOptions(gameModId,options)
-
-  const query = useInfiniteQuery(queryOptions , queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetYouTubeVideosQueryOptions = <TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameModId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetYouTubeVideosQueryResult = NonNullable<Awaited<ReturnType<typeof getYouTubeVideos>>>
+export type GetYouTubeVideosQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getYouTubeVideos>>
+>
 export type GetYouTubeVideosQueryError = ErrorType<unknown>
 
-
-export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getYouTubeVideos>>,
-          TError,
-          Awaited<ReturnType<typeof getYouTubeVideos>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getYouTubeVideos>>,
-          TError,
-          Awaited<ReturnType<typeof getYouTubeVideos>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetYouTubeVideos<
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getYouTubeVideos>>,
+                    TError,
+                    Awaited<ReturnType<typeof getYouTubeVideos>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetYouTubeVideos<
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getYouTubeVideos>>,
+                    TError,
+                    Awaited<ReturnType<typeof getYouTubeVideos>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetYouTubeVideos<
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get YouTube videos
  */
 
-export function useGetYouTubeVideos<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetYouTubeVideos<
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetYouTubeVideosQueryOptions(gameModId, options)
 
-  const queryOptions = getGetYouTubeVideosQueryOptions(gameModId,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
 
-
-
-export const getGetYouTubeVideosSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetYouTubeVideosSuspenseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    }
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey =
+        queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId);
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getYouTubeVideos>>
+    > = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getYouTubeVideos>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetYouTubeVideosSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getYouTubeVideos>>>
+export type GetYouTubeVideosSuspenseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getYouTubeVideos>>
+>
 export type GetYouTubeVideosSuspenseQueryError = ErrorType<unknown>
 
-
-export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetYouTubeVideosSuspense<
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options: {
+        query: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetYouTubeVideosSuspense<
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetYouTubeVideosSuspense<
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get YouTube videos
  */
 
-export function useGetYouTubeVideosSuspense<TData = Awaited<ReturnType<typeof getYouTubeVideos>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetYouTubeVideosSuspense<
+    TData = Awaited<ReturnType<typeof getYouTubeVideos>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getYouTubeVideos>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetYouTubeVideosSuspenseQueryOptions(
+        gameModId,
+        options
+    )
 
-  const queryOptions = getGetYouTubeVideosSuspenseQueryOptions(gameModId,options)
+    const query = useSuspenseQuery(
+        queryOptions,
+        queryClient
+    ) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-export const getGetYouTubeVideosSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetYouTubeVideosQueryKey(gameModId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getYouTubeVideos>>> = ({ signal }) => getYouTubeVideos(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetYouTubeVideosSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getYouTubeVideos>>>
-export type GetYouTubeVideosSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Get YouTube videos
- */
-
-export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getYouTubeVideos>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getYouTubeVideos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetYouTubeVideosSuspenseInfiniteQueryOptions(gameModId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
 
 /**
  * Add one or more YouTube video links to the mod
@@ -452,968 +556,1180 @@ export function useGetYouTubeVideosSuspenseInfinite<TData = InfiniteData<Awaited
 export const addYouTubeVideos = (
     gameModId: number,
     youTubeVideoRequest: BodyType<YouTubeVideoRequest[]>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseListYouTubeVideoResponse>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: youTubeVideoRequest, signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseListYouTubeVideoResponse>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/youtube-videos`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: youTubeVideoRequest,
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getAddYouTubeVideosMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: BodyType<YouTubeVideoRequest[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: BodyType<YouTubeVideoRequest[]>}, TContext> => {
-
-const mutationKey = ['addYouTubeVideos'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addYouTubeVideos>>, {gameModId: number;data: BodyType<YouTubeVideoRequest[]>}> = (props) => {
-          const {gameModId,data} = props ?? {};
-
-          return  addYouTubeVideos(gameModId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AddYouTubeVideosMutationResult = NonNullable<Awaited<ReturnType<typeof addYouTubeVideos>>>
-    export type AddYouTubeVideosMutationBody = BodyType<YouTubeVideoRequest[]>
-    export type AddYouTubeVideosMutationError = ErrorType<unknown>
-
-    /**
- * @summary Add YouTube videos
- */
-export const useAddYouTubeVideos = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addYouTubeVideos>>, TError,{gameModId: number;data: BodyType<YouTubeVideoRequest[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getAddYouTubeVideosMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof addYouTubeVideos>>,
         TError,
-        {gameModId: number;data: BodyType<YouTubeVideoRequest[]>},
+        { gameModId: number; data: BodyType<YouTubeVideoRequest[]> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof addYouTubeVideos>>,
+    TError,
+    { gameModId: number; data: BodyType<YouTubeVideoRequest[]> },
+    TContext
+> => {
+    const mutationKey = ['addYouTubeVideos']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getAddYouTubeVideosMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof addYouTubeVideos>>,
+        { gameModId: number; data: BodyType<YouTubeVideoRequest[]> }
+    > = (props) => {
+        const { gameModId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return addYouTubeVideos(gameModId, data, requestOptions)
     }
-    /**
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type AddYouTubeVideosMutationResult = NonNullable<
+    Awaited<ReturnType<typeof addYouTubeVideos>>
+>
+export type AddYouTubeVideosMutationBody = BodyType<YouTubeVideoRequest[]>
+export type AddYouTubeVideosMutationError = ErrorType<unknown>
+
+/**
+ * @summary Add YouTube videos
+ */
+export const useAddYouTubeVideos = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof addYouTubeVideos>>,
+            TError,
+            { gameModId: number; data: BodyType<YouTubeVideoRequest[]> },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof addYouTubeVideos>>,
+    TError,
+    { gameModId: number; data: BodyType<YouTubeVideoRequest[]> },
+    TContext
+> => {
+    const mutationOptions = getAddYouTubeVideosMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+/**
  * Retrieve all mod images (excluding header)
  * @summary Get mod images
  */
 export const getModImages = (
     gameModId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseListImage>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`, method: 'GET', signal
-    },
-      options);
+    return customInstance<ApiResponseListImage>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`,
+            method: 'GET',
+            signal,
+        },
+        options
+    )
+}
+
+export const getGetModImagesQueryKey = (gameModId?: number) => {
+    return [
+        `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`,
+    ] as const
+}
+
+export const getGetModImagesQueryOptions = <
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
     }
-  
-
-export const getGetModImagesQueryKey = (gameModId?: number,) => {
-    return [`http://localhost:8080/api/v1/mods/${gameModId}/images/mod`] as const;
-    }
-
-    
-export const getGetModImagesInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey =
+        queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({
+        signal,
+    }) => getModImages(gameModId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameModId), ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!gameModId,
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getModImages>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetModImagesInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getModImages>>>
-export type GetModImagesInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getModImages>>,
-          TError,
-          Awaited<ReturnType<typeof getModImages>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getModImages>>,
-          TError,
-          Awaited<ReturnType<typeof getModImages>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Get mod images
- */
-
-export function useGetModImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetModImagesInfiniteQueryOptions(gameModId,options)
-
-  const query = useInfiniteQuery(queryOptions , queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetModImagesQueryOptions = <TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameModId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetModImagesQueryResult = NonNullable<Awaited<ReturnType<typeof getModImages>>>
+export type GetModImagesQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getModImages>>
+>
 export type GetModImagesQueryError = ErrorType<unknown>
 
-
-export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getModImages>>,
-          TError,
-          Awaited<ReturnType<typeof getModImages>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getModImages>>,
-          TError,
-          Awaited<ReturnType<typeof getModImages>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetModImages<
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getModImages>>,
+                    TError,
+                    Awaited<ReturnType<typeof getModImages>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetModImages<
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getModImages>>,
+                    TError,
+                    Awaited<ReturnType<typeof getModImages>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetModImages<
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get mod images
  */
 
-export function useGetModImages<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetModImages<
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetModImagesQueryOptions(gameModId, options)
 
-  const queryOptions = getGetModImagesQueryOptions(gameModId,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
 
-
-
-export const getGetModImagesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetModImagesSuspenseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    }
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey =
+        queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({
+        signal,
+    }) => getModImages(gameModId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getModImages>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetModImagesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getModImages>>>
+export type GetModImagesSuspenseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getModImages>>
+>
 export type GetModImagesSuspenseQueryError = ErrorType<unknown>
 
-
-export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetModImagesSuspense<
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options: {
+        query: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetModImagesSuspense<
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetModImagesSuspense<
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get mod images
  */
 
-export function useGetModImagesSuspense<TData = Awaited<ReturnType<typeof getModImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetModImagesSuspense<
+    TData = Awaited<ReturnType<typeof getModImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getModImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetModImagesSuspenseQueryOptions(gameModId, options)
 
-  const queryOptions = getGetModImagesSuspenseQueryOptions(gameModId,options)
+    const query = useSuspenseQuery(
+        queryOptions,
+        queryClient
+    ) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-export const getGetModImagesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetModImagesQueryKey(gameModId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getModImages>>> = ({ signal }) => getModImages(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetModImagesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getModImages>>>
-export type GetModImagesSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Get mod images
- */
-
-export function useGetModImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getModImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getModImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetModImagesSuspenseInfiniteQueryOptions(gameModId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
 
 export const uploadModImage = (
     gameModId: number,
     uploadModImageBody: BodyType<UploadModImageBody>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseImage>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: uploadModImageBody, signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseImage>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/images/mod`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: uploadModImageBody,
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getUploadModImageMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: BodyType<UploadModImageBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: BodyType<UploadModImageBody>}, TContext> => {
-
-const mutationKey = ['uploadModImage'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadModImage>>, {gameModId: number;data: BodyType<UploadModImageBody>}> = (props) => {
-          const {gameModId,data} = props ?? {};
-
-          return  uploadModImage(gameModId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UploadModImageMutationResult = NonNullable<Awaited<ReturnType<typeof uploadModImage>>>
-    export type UploadModImageMutationBody = BodyType<UploadModImageBody>
-    export type UploadModImageMutationError = ErrorType<unknown>
-
-    export const useUploadModImage = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModImage>>, TError,{gameModId: number;data: BodyType<UploadModImageBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUploadModImageMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof uploadModImage>>,
         TError,
-        {gameModId: number;data: BodyType<UploadModImageBody>},
+        { gameModId: number; data: BodyType<UploadModImageBody> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadModImage>>,
+    TError,
+    { gameModId: number; data: BodyType<UploadModImageBody> },
+    TContext
+> => {
+    const mutationKey = ['uploadModImage']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUploadModImageMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadModImage>>,
+        { gameModId: number; data: BodyType<UploadModImageBody> }
+    > = (props) => {
+        const { gameModId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return uploadModImage(gameModId, data, requestOptions)
     }
-    /**
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadModImageMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadModImage>>
+>
+export type UploadModImageMutationBody = BodyType<UploadModImageBody>
+export type UploadModImageMutationError = ErrorType<unknown>
+
+export const useUploadModImage = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadModImage>>,
+            TError,
+            { gameModId: number; data: BodyType<UploadModImageBody> },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadModImage>>,
+    TError,
+    { gameModId: number; data: BodyType<UploadModImageBody> },
+    TContext
+> => {
+    const mutationOptions = getUploadModImageMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+/**
  * Retrieve the header image for a mod
  * @summary Get header image for mod
  */
 export const getHeaderImage = (
     gameModId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseImage>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/header`, method: 'GET', signal
-    },
-      options);
+    return customInstance<ApiResponseImage>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/images/header`,
+            method: 'GET',
+            signal,
+        },
+        options
+    )
+}
+
+export const getGetHeaderImageQueryKey = (gameModId?: number) => {
+    return [
+        `http://localhost:8080/api/v1/mods/${gameModId}/images/header`,
+    ] as const
+}
+
+export const getGetHeaderImageQueryOptions = <
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
     }
-  
-
-export const getGetHeaderImageQueryKey = (gameModId?: number,) => {
-    return [`http://localhost:8080/api/v1/mods/${gameModId}/images/header`] as const;
-    }
-
-    
-export const getGetHeaderImageInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey =
+        queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId);
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getHeaderImage>>
+    > = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameModId), ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!gameModId,
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getHeaderImage>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetHeaderImageInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getHeaderImage>>>
-export type GetHeaderImageInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getHeaderImage>>,
-          TError,
-          Awaited<ReturnType<typeof getHeaderImage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getHeaderImage>>,
-          TError,
-          Awaited<ReturnType<typeof getHeaderImage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Get header image for mod
- */
-
-export function useGetHeaderImageInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetHeaderImageInfiniteQueryOptions(gameModId,options)
-
-  const query = useInfiniteQuery(queryOptions , queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetHeaderImageQueryOptions = <TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameModId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetHeaderImageQueryResult = NonNullable<Awaited<ReturnType<typeof getHeaderImage>>>
+export type GetHeaderImageQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getHeaderImage>>
+>
 export type GetHeaderImageQueryError = ErrorType<unknown>
 
-
-export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getHeaderImage>>,
-          TError,
-          Awaited<ReturnType<typeof getHeaderImage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getHeaderImage>>,
-          TError,
-          Awaited<ReturnType<typeof getHeaderImage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetHeaderImage<
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getHeaderImage>>,
+                    TError,
+                    Awaited<ReturnType<typeof getHeaderImage>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetHeaderImage<
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getHeaderImage>>,
+                    TError,
+                    Awaited<ReturnType<typeof getHeaderImage>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetHeaderImage<
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get header image for mod
  */
 
-export function useGetHeaderImage<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetHeaderImage<
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetHeaderImageQueryOptions(gameModId, options)
 
-  const queryOptions = getGetHeaderImageQueryOptions(gameModId,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
 
-
-
-export const getGetHeaderImageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetHeaderImageSuspenseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    }
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey =
+        queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId);
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getHeaderImage>>
+    > = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getHeaderImage>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetHeaderImageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getHeaderImage>>>
+export type GetHeaderImageSuspenseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getHeaderImage>>
+>
 export type GetHeaderImageSuspenseQueryError = ErrorType<unknown>
 
-
-export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetHeaderImageSuspense<
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options: {
+        query: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetHeaderImageSuspense<
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetHeaderImageSuspense<
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get header image for mod
  */
 
-export function useGetHeaderImageSuspense<TData = Awaited<ReturnType<typeof getHeaderImage>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetHeaderImageSuspense<
+    TData = Awaited<ReturnType<typeof getHeaderImage>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getHeaderImage>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetHeaderImageSuspenseQueryOptions(
+        gameModId,
+        options
+    )
 
-  const queryOptions = getGetHeaderImageSuspenseQueryOptions(gameModId,options)
+    const query = useSuspenseQuery(
+        queryOptions,
+        queryClient
+    ) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-export const getGetHeaderImageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetHeaderImageQueryKey(gameModId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHeaderImage>>> = ({ signal }) => getHeaderImage(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetHeaderImageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getHeaderImage>>>
-export type GetHeaderImageSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Get header image for mod
- */
-
-export function useGetHeaderImageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getHeaderImage>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getHeaderImage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetHeaderImageSuspenseInfiniteQueryOptions(gameModId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
 
 export const uploadHeaderImage = (
     gameModId: number,
     uploadHeaderImageBody: BodyType<UploadHeaderImageBody>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseImage>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/header`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: uploadHeaderImageBody, signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseImage>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/images/header`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: uploadHeaderImageBody,
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getUploadHeaderImageMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: BodyType<UploadHeaderImageBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: BodyType<UploadHeaderImageBody>}, TContext> => {
-
-const mutationKey = ['uploadHeaderImage'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadHeaderImage>>, {gameModId: number;data: BodyType<UploadHeaderImageBody>}> = (props) => {
-          const {gameModId,data} = props ?? {};
-
-          return  uploadHeaderImage(gameModId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UploadHeaderImageMutationResult = NonNullable<Awaited<ReturnType<typeof uploadHeaderImage>>>
-    export type UploadHeaderImageMutationBody = BodyType<UploadHeaderImageBody>
-    export type UploadHeaderImageMutationError = ErrorType<unknown>
-
-    export const useUploadHeaderImage = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadHeaderImage>>, TError,{gameModId: number;data: BodyType<UploadHeaderImageBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUploadHeaderImageMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof uploadHeaderImage>>,
         TError,
-        {gameModId: number;data: BodyType<UploadHeaderImageBody>},
+        { gameModId: number; data: BodyType<UploadHeaderImageBody> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadHeaderImage>>,
+    TError,
+    { gameModId: number; data: BodyType<UploadHeaderImageBody> },
+    TContext
+> => {
+    const mutationKey = ['uploadHeaderImage']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUploadHeaderImageMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadHeaderImage>>,
+        { gameModId: number; data: BodyType<UploadHeaderImageBody> }
+    > = (props) => {
+        const { gameModId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return uploadHeaderImage(gameModId, data, requestOptions)
     }
-    /**
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadHeaderImageMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadHeaderImage>>
+>
+export type UploadHeaderImageMutationBody = BodyType<UploadHeaderImageBody>
+export type UploadHeaderImageMutationError = ErrorType<unknown>
+
+export const useUploadHeaderImage = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadHeaderImage>>,
+            TError,
+            { gameModId: number; data: BodyType<UploadHeaderImageBody> },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadHeaderImage>>,
+    TError,
+    { gameModId: number; data: BodyType<UploadHeaderImageBody> },
+    TContext
+> => {
+    const mutationOptions = getUploadHeaderImageMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+/**
  * Retrieve all images associated with a mod
  * @summary Get all images for mod
  */
 export const getImages = (
     gameModId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseListImage>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images`, method: 'GET', signal
-    },
-      options);
+    return customInstance<ApiResponseListImage>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/images`,
+            method: 'GET',
+            signal,
+        },
+        options
+    )
+}
+
+export const getGetImagesQueryKey = (gameModId?: number) => {
+    return [`http://localhost:8080/api/v1/mods/${gameModId}/images`] as const
+}
+
+export const getGetImagesQueryOptions = <
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
     }
-  
-
-export const getGetImagesQueryKey = (gameModId?: number,) => {
-    return [`http://localhost:8080/api/v1/mods/${gameModId}/images`] as const;
-    }
-
-    
-export const getGetImagesInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({
+        signal,
+    }) => getImages(gameModId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameModId), ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!gameModId,
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getImages>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetImagesInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getImages>>>
-export type GetImagesInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getImages>>,
-          TError,
-          Awaited<ReturnType<typeof getImages>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getImages>>,
-          TError,
-          Awaited<ReturnType<typeof getImages>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Get all images for mod
- */
-
-export function useGetImagesInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetImagesInfiniteQueryOptions(gameModId,options)
-
-  const query = useInfiniteQuery(queryOptions , queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetImagesQueryOptions = <TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(gameModId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetImagesQueryResult = NonNullable<Awaited<ReturnType<typeof getImages>>>
+export type GetImagesQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getImages>>
+>
 export type GetImagesQueryError = ErrorType<unknown>
 
-
-export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getImages>>,
-          TError,
-          Awaited<ReturnType<typeof getImages>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getImages>>,
-          TError,
-          Awaited<ReturnType<typeof getImages>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetImages<
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getImages>>,
+                    TError,
+                    Awaited<ReturnType<typeof getImages>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetImages<
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getImages>>,
+                    TError,
+                    Awaited<ReturnType<typeof getImages>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetImages<
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get all images for mod
  */
 
-export function useGetImages<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetImages<
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetImagesQueryOptions(gameModId, options)
 
-  const queryOptions = getGetImagesQueryOptions(gameModId,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
 
-
-
-export const getGetImagesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetImagesSuspenseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    }
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({
+        signal,
+    }) => getImages(gameModId, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getImages>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetImagesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getImages>>>
+export type GetImagesSuspenseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getImages>>
+>
 export type GetImagesSuspenseQueryError = ErrorType<unknown>
 
-
-export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetImagesSuspense<
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options: {
+        query: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetImagesSuspense<
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetImagesSuspense<
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get all images for mod
  */
 
-export function useGetImagesSuspense<TData = Awaited<ReturnType<typeof getImages>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetImagesSuspense<
+    TData = Awaited<ReturnType<typeof getImages>>,
+    TError = ErrorType<unknown>,
+>(
+    gameModId: number,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof getImages>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getGetImagesSuspenseQueryOptions(gameModId, options)
 
-  const queryOptions = getGetImagesSuspenseQueryOptions(gameModId,options)
+    const query = useSuspenseQuery(
+        queryOptions,
+        queryClient
+    ) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-export const getGetImagesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetImagesQueryKey(gameModId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImages>>> = ({ signal }) => getImages(gameModId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetImagesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getImages>>>
-export type GetImagesSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Get all images for mod
- */
-
-export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getImages>>>, TError = ErrorType<unknown>>(
- gameModId: number, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getImages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetImagesSuspenseInfiniteQueryOptions(gameModId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
 
 /**
  * Delete a specific image
@@ -1422,60 +1738,82 @@ export function useGetImagesSuspenseInfinite<TData = InfiniteData<Awaited<Return
 export const deleteImage = (
     gameModId: number,
     imageId: number,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${gameModId}/images/${imageId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${gameModId}/images/${imageId}`,
+            method: 'DELETE',
+        },
+        options
+    )
+}
 
-
-export const getDeleteImageMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImage>>, TError,{gameModId: number;imageId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteImage>>, TError,{gameModId: number;imageId: number}, TContext> => {
-
-const mutationKey = ['deleteImage'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteImage>>, {gameModId: number;imageId: number}> = (props) => {
-          const {gameModId,imageId} = props ?? {};
-
-          return  deleteImage(gameModId,imageId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteImageMutationResult = NonNullable<Awaited<ReturnType<typeof deleteImage>>>
-    
-    export type DeleteImageMutationError = ErrorType<unknown>
-
-    /**
- * @summary Delete image
- */
-export const useDeleteImage = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImage>>, TError,{gameModId: number;imageId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getDeleteImageMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof deleteImage>>,
         TError,
-        {gameModId: number;imageId: number},
+        { gameModId: number; imageId: number },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof deleteImage>>,
+    TError,
+    { gameModId: number; imageId: number },
+    TContext
+> => {
+    const mutationKey = ['deleteImage']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getDeleteImageMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof deleteImage>>,
+        { gameModId: number; imageId: number }
+    > = (props) => {
+        const { gameModId, imageId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return deleteImage(gameModId, imageId, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteImageMutationResult = NonNullable<
+    Awaited<ReturnType<typeof deleteImage>>
+>
+
+export type DeleteImageMutationError = ErrorType<unknown>
+
+/**
+ * @summary Delete image
+ */
+export const useDeleteImage = <TError = ErrorType<unknown>, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof deleteImage>>,
+            TError,
+            { gameModId: number; imageId: number },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof deleteImage>>,
+    TError,
+    { gameModId: number; imageId: number },
+    TContext
+> => {
+    const mutationOptions = getDeleteImageMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

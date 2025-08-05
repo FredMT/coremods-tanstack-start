@@ -6,3 +6,4 @@ orval.config.ts
 api-docs.yaml
 .output/
 .nitro/
+.readme/

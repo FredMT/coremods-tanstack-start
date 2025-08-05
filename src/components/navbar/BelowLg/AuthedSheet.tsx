@@ -8,17 +8,18 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet'
-import { useRouteContext } from '@tanstack/react-router'
 
-import { AuthedSheetItem } from '@/components/navbar/BelowLg/AuthedSheetItem'
 import { navbarAuthedItems } from '@/components/navbar/navbarAuthedItems'
+import { useUser } from '@/lib/react-query-auth/config'
 import { MailIcon, User2, XIcon } from 'lucide-react'
 
 export function AuthedSheet() {
-    const context = useRouteContext({ from: '__root__' })
-    const user = context.user
+    const user = useUser({ retry: false })
+
+    if (user.isLoading) return <div>Loading...</div>
+
     const authedItems = navbarAuthedItems
-    const r2Endpoint = import.meta.env.VITE_R2_PUBLIC_DEV_ENDPOINT;
+    const r2Endpoint = import.meta.env.VITE_R2_PUBLIC_DEV_ENDPOINT
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -38,10 +39,16 @@ export function AuthedSheet() {
                 <div className="flex min-h-18 items-center justify-between gap-x-4 border-b pr-3 pl-6">
                     <div className="flex items-center gap-x-2">
                         <Avatar>
-                            <AvatarImage src={`${r2Endpoint}/${user?.image}`} />
-                            <AvatarFallback>{user?.username.substr(0, 2).toUpperCase()}</AvatarFallback>
+                            <AvatarImage
+                                src={`${r2Endpoint}/${user.data?.image}`}
+                            />
+                            <AvatarFallback>
+                                {user.data?.username
+                                    ?.substr(0, 2)
+                                    .toUpperCase()}
+                            </AvatarFallback>
                         </Avatar>
-                        <p className="font-semibold">{user?.username}</p>
+                        <p className="font-semibold">{user.data?.username}</p>
                     </div>
                     <div className="flex items-center gap-x-2">
                         <SheetClose asChild>
@@ -65,9 +72,10 @@ export function AuthedSheet() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-y-1">
-                    {authedItems.map((item) => (
-                        <AuthedSheetItem key={item.label} item={item} />
-                    ))}
+                    {authedItems.map((item) => {
+                        const ItemComponent = item.component
+                        return <ItemComponent key={item.id} variant="sheet" />
+                    })}
                 </div>
             </SheetContent>
         </Sheet>

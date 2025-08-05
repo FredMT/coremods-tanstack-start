@@ -4,152 +4,221 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 import type {
-  MutationFunction,
-  QueryClient,
-  UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+    MutationFunction,
+    QueryClient,
+    UseMutationOptions,
+    UseMutationResult,
+} from '@tanstack/react-query'
 
 import type {
-  ApiResponseModFileEditResponse,
-  ApiResponseModFileUploadResponse,
-  ModFileEditRequest,
-  UploadModFileBody,
-  UploadModFileParams
-} from '../endpoints.schemas';
+    ApiResponseModFileEditResponse,
+    ApiResponseModFileUploadResponse,
+    ModFileEditRequest,
+    UploadModFileBody,
+    UploadModFileParams,
+} from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType , BodyType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType, BodyType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const editModFile = (
     modId: number,
     fileId: number,
     modFileEditRequest: BodyType<ModFileEditRequest>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseModFileEditResponse>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/files/${fileId}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: modFileEditRequest
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseModFileEditResponse>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/files/${fileId}`,
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            data: modFileEditRequest,
+        },
+        options
+    )
+}
 
-
-export const getEditModFileMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: BodyType<ModFileEditRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: BodyType<ModFileEditRequest>}, TContext> => {
-
-const mutationKey = ['editModFile'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof editModFile>>, {modId: number;fileId: number;data: BodyType<ModFileEditRequest>}> = (props) => {
-          const {modId,fileId,data} = props ?? {};
-
-          return  editModFile(modId,fileId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type EditModFileMutationResult = NonNullable<Awaited<ReturnType<typeof editModFile>>>
-    export type EditModFileMutationBody = BodyType<ModFileEditRequest>
-    export type EditModFileMutationError = ErrorType<unknown>
-
-    export const useEditModFile = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof editModFile>>, TError,{modId: number;fileId: number;data: BodyType<ModFileEditRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getEditModFileMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof editModFile>>,
         TError,
-        {modId: number;fileId: number;data: BodyType<ModFileEditRequest>},
+        { modId: number; fileId: number; data: BodyType<ModFileEditRequest> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof editModFile>>,
+    TError,
+    { modId: number; fileId: number; data: BodyType<ModFileEditRequest> },
+    TContext
+> => {
+    const mutationKey = ['editModFile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getEditModFileMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof editModFile>>,
+        { modId: number; fileId: number; data: BodyType<ModFileEditRequest> }
+    > = (props) => {
+        const { modId, fileId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return editModFile(modId, fileId, data, requestOptions)
     }
-    export const uploadModFile = (
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type EditModFileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof editModFile>>
+>
+export type EditModFileMutationBody = BodyType<ModFileEditRequest>
+export type EditModFileMutationError = ErrorType<unknown>
+
+export const useEditModFile = <TError = ErrorType<unknown>, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof editModFile>>,
+            TError,
+            {
+                modId: number
+                fileId: number
+                data: BodyType<ModFileEditRequest>
+            },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof editModFile>>,
+    TError,
+    { modId: number; fileId: number; data: BodyType<ModFileEditRequest> },
+    TContext
+> => {
+    const mutationOptions = getEditModFileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+export const uploadModFile = (
     modId: number,
     uploadModFileBody: BodyType<UploadModFileBody>,
     params: UploadModFileParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      const formData = new FormData();
-formData.append(`archiveFile`, uploadModFileBody.archiveFile)
+    const formData = new FormData()
+    formData.append(`archiveFile`, uploadModFileBody.archiveFile)
 
-      return customInstance<ApiResponseModFileUploadResponse>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/files`, method: 'POST',
-      headers: {'Content-Type': 'multipart/form-data', },
-       data: formData,
-        params, signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseModFileUploadResponse>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/files`,
+            method: 'POST',
+            headers: { 'Content-Type': 'multipart/form-data' },
+            data: formData,
+            params,
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getUploadModFileMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams}, TContext> => {
-
-const mutationKey = ['uploadModFile'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadModFile>>, {modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams}> = (props) => {
-          const {modId,data,params} = props ?? {};
-
-          return  uploadModFile(modId,data,params,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UploadModFileMutationResult = NonNullable<Awaited<ReturnType<typeof uploadModFile>>>
-    export type UploadModFileMutationBody = BodyType<UploadModFileBody>
-    export type UploadModFileMutationError = ErrorType<unknown>
-
-    export const useUploadModFile = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadModFile>>, TError,{modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUploadModFileMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof uploadModFile>>,
         TError,
-        {modId: number;data: BodyType<UploadModFileBody>;params: UploadModFileParams},
+        {
+            modId: number
+            data: BodyType<UploadModFileBody>
+            params: UploadModFileParams
+        },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadModFile>>,
+    TError,
+    {
+        modId: number
+        data: BodyType<UploadModFileBody>
+        params: UploadModFileParams
+    },
+    TContext
+> => {
+    const mutationKey = ['uploadModFile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUploadModFileMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadModFile>>,
+        {
+            modId: number
+            data: BodyType<UploadModFileBody>
+            params: UploadModFileParams
+        }
+    > = (props) => {
+        const { modId, data, params } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return uploadModFile(modId, data, params, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadModFileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadModFile>>
+>
+export type UploadModFileMutationBody = BodyType<UploadModFileBody>
+export type UploadModFileMutationError = ErrorType<unknown>
+
+export const useUploadModFile = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadModFile>>,
+            TError,
+            {
+                modId: number
+                data: BodyType<UploadModFileBody>
+                params: UploadModFileParams
+            },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadModFile>>,
+    TError,
+    {
+        modId: number
+        data: BodyType<UploadModFileBody>
+        params: UploadModFileParams
+    },
+    TContext
+> => {
+    const mutationOptions = getUploadModFileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

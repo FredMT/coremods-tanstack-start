@@ -32,6 +32,10 @@ function RouteComponent() {
                 gcTime: 1_000 * 60 * 5,
                 select: (response) => response.data,
             },
+            request: {
+                withCredentials: true,
+                withXSRFToken: true,
+            }
         }
     )
 

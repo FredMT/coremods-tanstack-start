@@ -4,200 +4,268 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 import type {
-  MutationFunction,
-  QueryClient,
-  UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+    MutationFunction,
+    QueryClient,
+    UseMutationOptions,
+    UseMutationResult,
+} from '@tanstack/react-query'
 
 import type {
-  ApiResponseCreateModTagResponse,
-  ApiResponseVoid,
-  CreateModTagRequest
-} from '../endpoints.schemas';
+    ApiResponseCreateModTagResponse,
+    ApiResponseVoid,
+    CreateModTagRequest,
+} from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType , BodyType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType, BodyType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const createTag = (
     modId: number,
     createModTagRequest: BodyType<CreateModTagRequest>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseCreateModTagResponse>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/tags`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createModTagRequest, signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseCreateModTagResponse>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/tags`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: createModTagRequest,
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getCreateTagMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTag>>, TError,{modId: number;data: BodyType<CreateModTagRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createTag>>, TError,{modId: number;data: BodyType<CreateModTagRequest>}, TContext> => {
-
-const mutationKey = ['createTag'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTag>>, {modId: number;data: BodyType<CreateModTagRequest>}> = (props) => {
-          const {modId,data} = props ?? {};
-
-          return  createTag(modId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateTagMutationResult = NonNullable<Awaited<ReturnType<typeof createTag>>>
-    export type CreateTagMutationBody = BodyType<CreateModTagRequest>
-    export type CreateTagMutationError = ErrorType<unknown>
-
-    export const useCreateTag = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTag>>, TError,{modId: number;data: BodyType<CreateModTagRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getCreateTagMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof createTag>>,
         TError,
-        {modId: number;data: BodyType<CreateModTagRequest>},
+        { modId: number; data: BodyType<CreateModTagRequest> },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof createTag>>,
+    TError,
+    { modId: number; data: BodyType<CreateModTagRequest> },
+    TContext
+> => {
+    const mutationKey = ['createTag']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getCreateTagMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof createTag>>,
+        { modId: number; data: BodyType<CreateModTagRequest> }
+    > = (props) => {
+        const { modId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return createTag(modId, data, requestOptions)
     }
-    export const voteForTag = (
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CreateTagMutationResult = NonNullable<
+    Awaited<ReturnType<typeof createTag>>
+>
+export type CreateTagMutationBody = BodyType<CreateModTagRequest>
+export type CreateTagMutationError = ErrorType<unknown>
+
+export const useCreateTag = <TError = ErrorType<unknown>, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof createTag>>,
+            TError,
+            { modId: number; data: BodyType<CreateModTagRequest> },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof createTag>>,
+    TError,
+    { modId: number; data: BodyType<CreateModTagRequest> },
+    TContext
+> => {
+    const mutationOptions = getCreateTagMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+export const voteForTag = (
     modId: number,
     tagId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/tags/${tagId}/vote`, method: 'POST', signal
-    },
-      options);
-    }
-  
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/tags/${tagId}/vote`,
+            method: 'POST',
+            signal,
+        },
+        options
+    )
+}
 
-
-export const getVoteForTagMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof voteForTag>>, TError,{modId: number;tagId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof voteForTag>>, TError,{modId: number;tagId: number}, TContext> => {
-
-const mutationKey = ['voteForTag'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof voteForTag>>, {modId: number;tagId: number}> = (props) => {
-          const {modId,tagId} = props ?? {};
-
-          return  voteForTag(modId,tagId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type VoteForTagMutationResult = NonNullable<Awaited<ReturnType<typeof voteForTag>>>
-    
-    export type VoteForTagMutationError = ErrorType<unknown>
-
-    export const useVoteForTag = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof voteForTag>>, TError,{modId: number;tagId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getVoteForTagMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof voteForTag>>,
         TError,
-        {modId: number;tagId: number},
+        { modId: number; tagId: number },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof voteForTag>>,
+    TError,
+    { modId: number; tagId: number },
+    TContext
+> => {
+    const mutationKey = ['voteForTag']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getVoteForTagMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof voteForTag>>,
+        { modId: number; tagId: number }
+    > = (props) => {
+        const { modId, tagId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return voteForTag(modId, tagId, requestOptions)
     }
-    export const deleteVoteForTag = (
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type VoteForTagMutationResult = NonNullable<
+    Awaited<ReturnType<typeof voteForTag>>
+>
+
+export type VoteForTagMutationError = ErrorType<unknown>
+
+export const useVoteForTag = <TError = ErrorType<unknown>, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof voteForTag>>,
+            TError,
+            { modId: number; tagId: number },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof voteForTag>>,
+    TError,
+    { modId: number; tagId: number },
+    TContext
+> => {
+    const mutationOptions = getVoteForTagMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+export const deleteVoteForTag = (
     modId: number,
     tagId: number,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/mods/${modId}/tags/${tagId}/vote`, method: 'DELETE'
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/mods/${modId}/tags/${tagId}/vote`,
+            method: 'DELETE',
+        },
+        options
+    )
+}
 
-
-export const getDeleteVoteForTagMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteVoteForTag>>, TError,{modId: number;tagId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteVoteForTag>>, TError,{modId: number;tagId: number}, TContext> => {
-
-const mutationKey = ['deleteVoteForTag'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteVoteForTag>>, {modId: number;tagId: number}> = (props) => {
-          const {modId,tagId} = props ?? {};
-
-          return  deleteVoteForTag(modId,tagId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteVoteForTagMutationResult = NonNullable<Awaited<ReturnType<typeof deleteVoteForTag>>>
-    
-    export type DeleteVoteForTagMutationError = ErrorType<unknown>
-
-    export const useDeleteVoteForTag = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteVoteForTag>>, TError,{modId: number;tagId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getDeleteVoteForTagMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof deleteVoteForTag>>,
         TError,
-        {modId: number;tagId: number},
+        { modId: number; tagId: number },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof deleteVoteForTag>>,
+    TError,
+    { modId: number; tagId: number },
+    TContext
+> => {
+    const mutationKey = ['deleteVoteForTag']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getDeleteVoteForTagMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof deleteVoteForTag>>,
+        { modId: number; tagId: number }
+    > = (props) => {
+        const { modId, tagId } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return deleteVoteForTag(modId, tagId, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteVoteForTagMutationResult = NonNullable<
+    Awaited<ReturnType<typeof deleteVoteForTag>>
+>
+
+export type DeleteVoteForTagMutationError = ErrorType<unknown>
+
+export const useDeleteVoteForTag = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof deleteVoteForTag>>,
+            TError,
+            { modId: number; tagId: number },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof deleteVoteForTag>>,
+    TError,
+    { modId: number; tagId: number },
+    TContext
+> => {
+    const mutationOptions = getDeleteVoteForTagMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

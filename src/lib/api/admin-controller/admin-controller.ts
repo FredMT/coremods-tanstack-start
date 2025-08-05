@@ -4,84 +4,104 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 import type {
-  MutationFunction,
-  QueryClient,
-  UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+    MutationFunction,
+    QueryClient,
+    UseMutationOptions,
+    UseMutationResult,
+} from '@tanstack/react-query'
 
 import type {
-  ApiResponseVoid,
-  UpdateUserRoleParams
-} from '../endpoints.schemas';
+    ApiResponseVoid,
+    UpdateUserRoleParams,
+} from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const updateUserRole = (
     userId: number,
     params: UpdateUserRoleParams,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<ApiResponseVoid>(
-      {url: `http://localhost:8080/api/v1/admin/users/${userId}/role`, method: 'PUT',
-        params
-    },
-      options);
-    }
-  
+    options?: SecondParameter<typeof customInstance>
+) => {
+    return customInstance<ApiResponseVoid>(
+        {
+            url: `http://localhost:8080/api/v1/admin/users/${userId}/role`,
+            method: 'PUT',
+            params,
+        },
+        options
+    )
+}
 
-
-export const getUpdateUserRoleMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUserRole>>, TError,{userId: number;params: UpdateUserRoleParams}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateUserRole>>, TError,{userId: number;params: UpdateUserRoleParams}, TContext> => {
-
-const mutationKey = ['updateUserRole'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUserRole>>, {userId: number;params: UpdateUserRoleParams}> = (props) => {
-          const {userId,params} = props ?? {};
-
-          return  updateUserRole(userId,params,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateUserRoleMutationResult = NonNullable<Awaited<ReturnType<typeof updateUserRole>>>
-    
-    export type UpdateUserRoleMutationError = ErrorType<unknown>
-
-    export const useUpdateUserRole = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUserRole>>, TError,{userId: number;params: UpdateUserRoleParams}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUpdateUserRoleMutationOptions = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof updateUserRole>>,
         TError,
-        {userId: number;params: UpdateUserRoleParams},
+        { userId: number; params: UpdateUserRoleParams },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof updateUserRole>>,
+    TError,
+    { userId: number; params: UpdateUserRoleParams },
+    TContext
+> => {
+    const mutationKey = ['updateUserRole']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUpdateUserRoleMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof updateUserRole>>,
+        { userId: number; params: UpdateUserRoleParams }
+    > = (props) => {
+        const { userId, params } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return updateUserRole(userId, params, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UpdateUserRoleMutationResult = NonNullable<
+    Awaited<ReturnType<typeof updateUserRole>>
+>
+
+export type UpdateUserRoleMutationError = ErrorType<unknown>
+
+export const useUpdateUserRole = <
+    TError = ErrorType<unknown>,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof updateUserRole>>,
+            TError,
+            { userId: number; params: UpdateUserRoleParams },
+            TContext
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof updateUserRole>>,
+    TError,
+    { userId: number; params: UpdateUserRoleParams },
+    TContext
+> => {
+    const mutationOptions = getUpdateUserRoleMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}

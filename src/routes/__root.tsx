@@ -7,7 +7,7 @@ import {
     createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import type { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 
 import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
 import { Footer } from '@/components/Footer'
@@ -17,15 +17,12 @@ import { Navigation } from '@/components/navbar/Navigation'
 import { NotFound } from '@/components/NotFound'
 import { ThemeProvider } from '@/components/theme-provider'
 import { getCsrfToken } from '@/fn/getCsrfToken'
-import { getUser } from '@/fn/getUser'
 import appCss from '@/styles/app.css?url'
-import { ResAuthUser } from '@/types/ResAuthUser'
 import { wrapCreateRootRouteWithSentry } from '@sentry/tanstackstart-react'
-import type { QueryClient } from '@tanstack/react-query'
+import { type QueryClient } from '@tanstack/react-query'
 
 export const Route = wrapCreateRootRouteWithSentry(createRootRouteWithContext)<{
     queryClient: QueryClient
-    user: ResAuthUser | null
 }>()({
     head: () => ({
         meta: [
@@ -58,11 +55,6 @@ export const Route = wrapCreateRootRouteWithSentry(createRootRouteWithContext)<{
     component: RootComponent,
     beforeLoad: async () => {
         await getCsrfToken()
-        const res = await getUser()
-
-        return {
-            user: res?.data || null,
-        }
     },
 })
 

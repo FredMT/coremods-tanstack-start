@@ -4,289 +4,285 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import {
-  useInfiniteQuery,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseInfiniteQueryResult,
-  DefinedUseQueryResult,
-  InfiniteData,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
+    DataTag,
+    DefinedInitialDataOptions,
+    DefinedUseQueryResult,
+    QueryClient,
+    QueryFunction,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    UseQueryOptions,
+    UseQueryResult,
+    UseSuspenseQueryOptions,
+    UseSuspenseQueryResult,
+} from '@tanstack/react-query'
 
-import type {
-  CsrfParams,
-  CsrfToken
-} from '../endpoints.schemas';
+import type { CsrfParams, CsrfToken } from '../endpoints.schemas'
 
-import { customInstance } from '.././mutator/custom-instance';
-import type { ErrorType } from '.././mutator/custom-instance';
+import { customInstance } from '.././mutator/custom-instance'
+import type { ErrorType } from '.././mutator/custom-instance'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const csrf = (
     params: CsrfParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+    options?: SecondParameter<typeof customInstance>,
+    signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<CsrfToken>(
-      {url: `http://localhost:8080/csrf`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
-
-export const getCsrfQueryKey = (params?: CsrfParams,) => {
-    return [`http://localhost:8080/csrf`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getCsrfInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(params: CsrfParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCsrfQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof csrf>>> = ({ signal }) => csrf(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return customInstance<CsrfToken>(
+        { url: `http://localhost:8080/csrf`, method: 'GET', params, signal },
+        options
+    )
 }
 
-export type CsrfInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof csrf>>>
-export type CsrfInfiniteQueryError = ErrorType<unknown>
-
-
-export function useCsrfInfinite<TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof csrf>>,
-          TError,
-          Awaited<ReturnType<typeof csrf>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCsrfInfinite<TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof csrf>>,
-          TError,
-          Awaited<ReturnType<typeof csrf>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCsrfInfinite<TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useCsrfInfinite<TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCsrfInfiniteQueryOptions(params,options)
-
-  const query = useInfiniteQuery(queryOptions , queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export const getCsrfQueryKey = (params?: CsrfParams) => {
+    return [`http://localhost:8080/csrf`, ...(params ? [params] : [])] as const
 }
 
-
-
-export const getCsrfQueryOptions = <TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(params: CsrfParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getCsrfQueryOptions = <
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customInstance>
+    }
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getCsrfQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getCsrfQueryKey(params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof csrf>>> = ({
+        signal,
+    }) => csrf(params, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof csrf>>> = ({ signal }) => csrf(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof csrf>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type CsrfQueryResult = NonNullable<Awaited<ReturnType<typeof csrf>>>
 export type CsrfQueryError = ErrorType<unknown>
 
-
-export function useCsrf<TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof csrf>>,
-          TError,
-          Awaited<ReturnType<typeof csrf>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCsrf<TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof csrf>>,
-          TError,
-          Awaited<ReturnType<typeof csrf>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCsrf<TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useCsrf<TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCsrfQueryOptions(params,options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export function useCsrf<
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof csrf>>,
+                    TError,
+                    Awaited<ReturnType<typeof csrf>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCsrf<
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof csrf>>,
+                    TError,
+                    Awaited<ReturnType<typeof csrf>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCsrf<
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useCsrf<
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getCsrfQueryOptions(params, options)
 
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export const getCsrfSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(params: CsrfParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export const getCsrfSuspenseQueryOptions = <
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof csrf>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    }
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getCsrfQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getCsrfQueryKey(params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof csrf>>> = ({
+        signal,
+    }) => csrf(params, requestOptions, signal)
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof csrf>>> = ({ signal }) => csrf(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof csrf>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type CsrfSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof csrf>>>
+export type CsrfSuspenseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof csrf>>
+>
 export type CsrfSuspenseQueryError = ErrorType<unknown>
 
-
-export function useCsrfSuspense<TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCsrfSuspense<TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCsrfSuspense<TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useCsrfSuspense<TData = Awaited<ReturnType<typeof csrf>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCsrfSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+export function useCsrfSuspense<
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options: {
+        query: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof csrf>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCsrfSuspense<
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof csrf>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCsrfSuspense<
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof csrf>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useCsrfSuspense<
+    TData = Awaited<ReturnType<typeof csrf>>,
+    TError = ErrorType<unknown>,
+>(
+    params: CsrfParams,
+    options?: {
+        query?: Partial<
+            UseSuspenseQueryOptions<
+                Awaited<ReturnType<typeof csrf>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customInstance>
+    },
+    queryClient?: QueryClient
+): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getCsrfSuspenseQueryOptions(params, options)
 
+    const query = useSuspenseQuery(
+        queryOptions,
+        queryClient
+    ) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-export const getCsrfSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(params: CsrfParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+    query.queryKey = queryOptions.queryKey
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCsrfQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof csrf>>> = ({ signal }) => csrf(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return query
 }
-
-export type CsrfSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof csrf>>>
-export type CsrfSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useCsrfSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCsrfSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCsrfSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useCsrfSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof csrf>>>, TError = ErrorType<unknown>>(
- params: CsrfParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof csrf>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCsrfSuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-

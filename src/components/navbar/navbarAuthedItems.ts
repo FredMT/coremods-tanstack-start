@@ -1,35 +1,33 @@
-import {
-    BoxIcon,
-    BoxesIcon,
-    HistoryIcon,
-    LogOutIcon,
-    SettingsIcon,
-    User2Icon,
-} from 'lucide-react'
+import { AccountSettingsItem } from "./items/AccountSettingsItem";
+import { DownloadHistoryItem } from "./items/DownloadHistoryItem";
+import { MyModpacksItem } from "./items/MyModpacksItem";
+import { MyModsItem } from "./items/MyModsItem";
+import { MyProfileItem } from "./items/MyProfileItem";
+import { SignOutItem } from "./items/SignOutItem";
 
 export const navbarAuthedItems = [
     {
-        label: 'My Profile',
-        icon: User2Icon,
+        id: 'my-profile',
+        component: MyProfileItem,
     },
     {
-        label: 'My Mods',
-        icon: BoxIcon,
+        id: 'my-mods',
+        component: MyModsItem,
     },
     {
-        label: 'My Modpacks',
-        icon: BoxesIcon,
+        id: 'my-modpacks',
+        component: MyModpacksItem,
     },
     {
-        label: 'Download history',
-        icon: HistoryIcon,
+        id: 'download-history',
+        component: DownloadHistoryItem,
     },
     {
-        label: 'Account Settings',
-        icon: SettingsIcon,
+        id: 'account-settings',
+        component: AccountSettingsItem,
     },
     {
-        label: 'Sign out',
-        icon: LogOutIcon,
+        id: 'sign-out',
+        component: SignOutItem,
     },
 ]

@@ -12,16 +12,17 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { loginServerFn } from '@/routes/login/-fn/loginServerFn'
+import { useLogin } from '@/lib/react-query-auth/config'
 import {
     LoginFormData,
     LoginFormSchema,
 } from '@/routes/login/-types/LoginFormSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useServerFn } from '@tanstack/react-start'
+import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 export function Login() {
+    const navigate = useNavigate()
     const form = useForm<LoginFormData>({
         resolver: zodResolver(LoginFormSchema),
         defaultValues: {
@@ -33,16 +34,16 @@ export function Login() {
 
     const [alert, setAlert] = useState<string | null>(null)
 
-    const loginFn = useServerFn(loginServerFn)
+    const login = useLogin()
 
     async function onSubmit(data: LoginFormData) {
         try {
-            const formData = new FormData()
-            formData.append('usernameOrEmail', data.usernameOrEmail)
-            formData.append('password', data.password)
-            formData.append('rememberMe', data.rememberMe.toString())
-
-            await loginFn({ data: formData })
+            await login.mutateAsync({
+                usernameOrEmail: data.usernameOrEmail,
+                password: data.password,
+                rememberMe: data.rememberMe,
+            })
+            navigate({ to: '/' })
         } catch (error) {
             if (error.name === 'ZodError' && error.issues) {
                 error.issues.forEach((issue: any) => {
